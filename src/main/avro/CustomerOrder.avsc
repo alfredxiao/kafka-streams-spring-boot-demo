@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "CustomerOrder",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "orderNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "productName",
+      "type" : "string"
+    },
+    {
+      "name": "amount",
+      "type" : {
+        "type": "bytes",
+        "logicalType": "decimal",
+        "precision": 8,
+        "scale": 2
+      }
+    },
+    {
+      "name" : "campaign",
+      "type" : ["null", "string"],
+      "default": null
+    }
+  ]
+}

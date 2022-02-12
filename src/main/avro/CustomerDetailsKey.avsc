@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "CustomerDetailsKey",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    }
+  ]
+}

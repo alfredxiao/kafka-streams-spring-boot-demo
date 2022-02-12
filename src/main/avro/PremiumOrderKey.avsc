@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "PremiumOrderKey",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "orderNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "record",
+  "name": "CustomerDetails",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "name",
+      "type" : "string"
+    },
+    {
+      "name" : "email",
+      "type" : "string"
+    },
+    {
+      "name":"activeCampaigns",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    }
+  ]
+}

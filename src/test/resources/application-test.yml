@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: kafka-demo
+  kafka:
+    streams:
+      application-id: kafka-demo
