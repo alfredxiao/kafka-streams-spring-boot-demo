@@ -22,6 +22,7 @@ dependencies {
 	implementation 'org.apache.kafka:kafka-streams'
 	implementation 'org.apache.avro:avro:1.11.0'
 	implementation 'io.confluent:kafka-avro-serializer:7.0.1'
+	implementation 'io.confluent:kafka-streams-avro-serde:7.0.1'
 	implementation 'io.confluent:kafka-schema-serializer:7.0.1'
 	implementation 'org.projectlombok:lombok:1.18.18'
 
@@ -33,6 +34,7 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.awaitility:awaitility:4.1.1'
 }
 
 test {

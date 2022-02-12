@@ -2,5 +2,31 @@ spring:
   application:
     name: kafka-demo
   kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+    properties:
+      schema.registry.url: mock://dummy
+      basic.auth.credentials.source: dummy
+      basic.auth.user.info: dummy
+      specific.avro.reader: true
+      spring.deserializer:
+        key.delegate.class: xiaoyf.demo.kafka.helper.serde.MockAvroDeserializer
+        value.delegate.class: xiaoyf.demo.kafka.helper.serde.MockAvroDeserializer
     streams:
       application-id: kafka-demo
+      properties:
+        replication.factor: 1
+        state.dir: ./build/tmp/state-dir
+        processing.guarantee: exactly_once
+        default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde
+        default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde
+    producer:
+      key-serializer: xiaoyf.demo.kafka.helper.serde.MockAvroSerializer
+      value-serializer: xiaoyf.demo.kafka.helper.serde.MockAvroSerializer
+    consumer:
+      group-id: test-group
+#      enable.auto.commit: false
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      auto-offset-reset: earliest
+    listener:
+      ack-mode: MANUAL_IMMEDIATE

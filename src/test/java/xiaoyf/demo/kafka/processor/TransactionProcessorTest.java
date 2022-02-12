@@ -16,7 +16,6 @@ import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.test.TestRecord;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -37,14 +36,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static xiaoyf.demo.kafka.helper.Const.APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAILS_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.CUST_ORDER_TABLE_CHANGELOG;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Dumper.dumpTestDriverStats;
 import static xiaoyf.demo.kafka.helper.Dumper.log;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerDetail;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerOrder;
 import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
-import static xiaoyf.demo.kafka.helper.serde.MockAvroDeserializer.registerTopic;
 
 @SpringBootTest(classes = {
         TransactionProcessor.class,
@@ -65,18 +62,6 @@ class TransactionProcessorTest {
     private Serde<CustomerDetails> customerDetailsSerde;
     private Serde<PremiumOrderKey> premiumOrderKeySerde;
     private Serde<PremiumOrder> premiumOrderSerde;
-
-    @BeforeAll
-    static void registerTopics() {
-        registerTopic(CUSTOMER_ORDER_TOPIC, true, CustomerOrderKey.SCHEMA$);
-        registerTopic(CUSTOMER_ORDER_TOPIC, false, CustomerOrder.SCHEMA$);
-        registerTopic(CUSTOMER_DETAILS_TOPIC, true, CustomerDetailsKey.SCHEMA$);
-        registerTopic(CUSTOMER_DETAILS_TOPIC, false, CustomerDetails.SCHEMA$);
-        registerTopic(PREMIUM_ORDER_TOPIC, true, PremiumOrderKey.SCHEMA$);
-        registerTopic(PREMIUM_ORDER_TOPIC, false, PremiumOrder.SCHEMA$);
-        registerTopic(CUST_ORDER_TABLE_CHANGELOG, true, CustomerOrderKey.SCHEMA$);
-        registerTopic(CUST_ORDER_TABLE_CHANGELOG, false, CustomerOrder.SCHEMA$);
-    }
 
     @BeforeEach
     void setup() {
@@ -140,13 +125,11 @@ class TransactionProcessorTest {
                             premiumOrderSerde.deserializer());
 
             orders.pipeRecordList(custOrders);
-
             details.pipeRecordList(custDetails);
 
             dumpTestDriverStats(testDriver);
 
             assertThat(output.readKeyValuesToList()).isEqualTo(premOrders);
-
         }
     }
 
