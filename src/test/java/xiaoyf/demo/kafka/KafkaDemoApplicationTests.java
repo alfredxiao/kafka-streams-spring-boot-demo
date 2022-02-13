@@ -70,7 +70,7 @@ class KafkaDemoApplicationTests {
         var details = customerDetail(100, "Alfred", "a@g.com", "GoHigh", "GoFar");
         kafkaTemplate.send(CUSTOMER_DETAILS_TOPIC, details.key(), details.value()).get();
 
-		    Awaitility.await().timeout(36, TimeUnit.SECONDS).until(() ->
+		    Awaitility.await().timeout(20, TimeUnit.SECONDS).until(() ->
 				    testListeners.outputs.size() == 1);
 
 		    var output = testListeners.outputs.get(0);
@@ -91,6 +91,18 @@ class KafkaDemoApplicationTests {
                         e.printStackTrace();
                     }
                 });
+    }
+
+    @Test
+    void shouldNotJoinOrdersWithCustomerDetailsWhenCampaignDoesNotMatch() throws Exception {
+        var order = customerOrder(567, 100, "Galaxy", "1200", "GoHigh");
+        kafkaTemplate.send(CUSTOMER_ORDER_TOPIC, order.key(), order.value()).get();
+
+        var details = customerDetail(100, "Alfred", "a@g.com", "GoFar");
+        kafkaTemplate.send(CUSTOMER_DETAILS_TOPIC, details.key(), details.value()).get();
+
+		    Awaitility.await().timeout(20, TimeUnit.SECONDS).until(() ->
+				    testListeners.outputs.size() == 0);
     }
 
     @TestConfiguration
