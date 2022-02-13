@@ -1,16 +1,19 @@
 package xiaoyf.demo.kafka.helper.serde;
 
+import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 @Slf4j
 public class MockAvroSerializer extends KafkaAvroSerializer {
 
     public MockAvroSerializer() {
         super.autoRegisterSchema = true;
-        super.schemaRegistry = SingletonMockSchemaRegistryClient.getInstance();
+        super.schemaRegistry = SharedMockSchemaRegistryClient.getInstance();
     }
 
     @Override

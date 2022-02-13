@@ -2,10 +2,13 @@ package xiaoyf.demo.kafka;
 
 import demo.model.PremiumOrder;
 import demo.model.PremiumOrderKey;
+import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.awaitility.Awaitility;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,12 +20,15 @@ import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.FileSystemUtils;
-import xiaoyf.demo.kafka.helper.serde.SingletonMockSchemaRegistryClient;
+import xiaoyf.demo.kafka.helper.serde.SharedMockSchemaRegistryClient;
 
+import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,12 +80,12 @@ class KafkaDemoApplicationTests {
         assertThat(output.value()).isEqualTo(premium.value);
 
         log.info("!!! SUBJECT LIST");
-        SingletonMockSchemaRegistryClient.getInstance().getAllSubjects()
+        SharedMockSchemaRegistryClient.getInstance().getAllSubjects()
                 .stream()
                 .sorted()
                 .forEach(subject -> {
                     try {
-                        var meta = SingletonMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
+                        var meta = SharedMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
                         log.info("!!! subject={}, id={}, schema={}", subject, meta.getId(), meta.getSchema());
                     } catch (Exception e) {
                         e.printStackTrace();

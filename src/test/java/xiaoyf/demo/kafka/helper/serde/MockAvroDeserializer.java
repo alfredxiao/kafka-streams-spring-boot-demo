@@ -14,7 +14,7 @@ public class MockAvroDeserializer extends KafkaAvroDeserializer {
         int id = readId(bytes);
         log.info("!!! @{} .deserialize() topic: {}, isKey: {}, bytes: {}, id: {}", this.hashCode(), topic, isDeserializingKey(), bytes.length, id);
 
-        this.schemaRegistry = SingletonMockSchemaRegistryClient.getInstance();
+        this.schemaRegistry = SharedMockSchemaRegistryClient.getInstance();
 
         super.useSpecificAvroReader = true;
         Object result = super.deserialize(topic, bytes);
