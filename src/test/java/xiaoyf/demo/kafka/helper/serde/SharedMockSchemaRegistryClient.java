@@ -13,12 +13,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * SharedMockSchemaRegistryClient makes several public methods from MockSchemaRegistryClient 'synchronized'
+ * with the hope that it is thread-safe and can be shared between threads in tests. In fact, current test
+ * all single threaded so far, and this class is implemented in a naive way, and it is probably not easy
+ * to really make it thread-safe otherwise parent class MockSchemaRegistryClient would have done this.
+ */
 public class SharedMockSchemaRegistryClient extends MockSchemaRegistryClient {
 
     private static final SharedMockSchemaRegistryClient INSTANCE = new SharedMockSchemaRegistryClient();
 
     private SharedMockSchemaRegistryClient() {
-        // make parent's idMap, etc. connections concurrent/synchronised ?
     }
 
     public static SharedMockSchemaRegistryClient getInstance() {
@@ -26,56 +31,42 @@ public class SharedMockSchemaRegistryClient extends MockSchemaRegistryClient {
     }
 
     @Override
-    public int register(String subject, ParsedSchema schema)
+    public synchronized int register(String subject, ParsedSchema schema)
             throws IOException, RestClientException {
-        synchronized (this) {
-            return super.register(subject, schema);
-        }
+        return super.register(subject, schema);
     }
 
     @Override
-    public int register(String subject, ParsedSchema schema, boolean normalize)
+    public synchronized int register(String subject, ParsedSchema schema, boolean normalize)
             throws IOException, RestClientException {
-        synchronized (this) {
-            return super.register(subject, schema, normalize);
-        }
+        return super.register(subject, schema, normalize);
     }
 
     @Override
-    public int register(String subject, ParsedSchema schema, int version, int id)
+    public synchronized int register(String subject, ParsedSchema schema, int version, int id)
             throws IOException, RestClientException {
-        synchronized (this) {
-            return super.register(subject, schema, version, id);
-        }
+        return super.register(subject, schema, version, id);
     }
 
     @Override
-    public ParsedSchema getSchemaById(int id) throws IOException, RestClientException {
-        synchronized (this) {
-            return super.getSchemaById(id);
-        }
+    public synchronized ParsedSchema getSchemaById(int id) throws IOException, RestClientException {
+        return super.getSchemaById(id);
     }
 
     @Override
-    public ParsedSchema getSchemaBySubjectAndId(String subject, int id) throws IOException, RestClientException {
-        synchronized (this) {
-            return super.getSchemaBySubjectAndId(subject, id);
-        }
+    public synchronized ParsedSchema getSchemaBySubjectAndId(String subject, int id) throws IOException, RestClientException {
+        return super.getSchemaBySubjectAndId(subject, id);
     }
 
     @Override
-    public int getId(String subject, ParsedSchema schema) throws IOException, RestClientException {
-        synchronized (this) {
-            return super.getId(subject, schema);
-        }
+    public synchronized int getId(String subject, ParsedSchema schema) throws IOException, RestClientException {
+        return super.getId(subject, schema);
     }
 
     @Override
-    public int getId(String subject, ParsedSchema schema, boolean normalize)
+    public synchronized int getId(String subject, ParsedSchema schema, boolean normalize)
             throws IOException, RestClientException {
-        synchronized (this) {
-            return super.getId(subject, schema, normalize);
-        }
+        return super.getId(subject, schema, normalize);
     }
 
     @Override
