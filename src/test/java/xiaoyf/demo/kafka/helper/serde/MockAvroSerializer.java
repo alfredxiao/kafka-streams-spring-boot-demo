@@ -16,14 +16,6 @@ public class MockAvroSerializer extends KafkaAvroSerializer {
         super.schemaRegistry = SharedMockSchemaRegistryClient.getInstance();
     }
 
-    public MockAvroSerializer(SchemaRegistryClient client) {
-        super(SharedMockSchemaRegistryClient.getInstance());
-    }
-
-    public MockAvroSerializer(SchemaRegistryClient client, Map<String, ?> props) {
-        super(SharedMockSchemaRegistryClient.getInstance(), props);
-    }
-
     @Override
     public byte[] serialize(String topic, Object record) {
         log.info("!!! @{} .serialize() topic: {}, class: {}, record:{}",
