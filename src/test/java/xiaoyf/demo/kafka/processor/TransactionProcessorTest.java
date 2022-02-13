@@ -64,13 +64,15 @@ class TransactionProcessorTest {
     private Serde<PremiumOrder> premiumOrderSerde;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setup() {
-        customerOrderKeySerde = new MockSpecificAvroSerde<>();
-        customerOrderSerde = new MockSpecificAvroSerde<>();
-        customerDetailsKeySerde = new MockSpecificAvroSerde<>();
-        customerDetailsSerde = new MockSpecificAvroSerde<>();
-        premiumOrderKeySerde = new MockSpecificAvroSerde<>();
-        premiumOrderSerde = new MockSpecificAvroSerde<>();
+        Serde<?> singleton = new MockSpecificAvroSerde<>();
+        customerOrderKeySerde = (Serde<CustomerOrderKey>) singleton;
+        customerOrderSerde = (Serde<CustomerOrder>) singleton;
+        customerDetailsKeySerde = (Serde<CustomerDetailsKey>) singleton;
+        customerDetailsSerde = (Serde<CustomerDetails>) singleton;
+        premiumOrderKeySerde = (Serde<PremiumOrderKey>) singleton;
+        premiumOrderSerde = (Serde<PremiumOrder>) singleton;
     }
 
 
