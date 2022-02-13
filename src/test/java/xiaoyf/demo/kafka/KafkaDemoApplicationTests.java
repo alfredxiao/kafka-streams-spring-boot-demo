@@ -6,6 +6,9 @@ import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientExcept
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.awaitility.Awaitility;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,17 +17,22 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.util.FileSystemUtils;
 import xiaoyf.demo.kafka.helper.serde.SharedMockSchemaRegistryClient;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import static xiaoyf.demo.kafka.helper.Const.*;
 import static xiaoyf.demo.kafka.helper.Fixtures.*;
 
@@ -39,6 +47,7 @@ import static xiaoyf.demo.kafka.helper.Fixtures.*;
                 "transaction.state.log.min.isr=1"
         }
 )
+@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)
 @Slf4j
 class KafkaDemoApplicationTests {
 
@@ -47,6 +56,11 @@ class KafkaDemoApplicationTests {
 
     @Autowired
     TestListeners testListeners;
+
+    @AfterEach
+    void cleanup() throws IOException {
+        FileSystemUtils.deleteRecursively(Path.of("./build/tmp/state-dir"));
+    }
 
     @Test
     void shouldJoinOrdersWithCustomerDetails() throws Exception {
@@ -66,13 +80,13 @@ class KafkaDemoApplicationTests {
         assertThat(output.value()).isEqualTo(premium.value);
 
         log.info("!!! SUBJECT LIST");
-        SharedMockSchemaRegistryClient.getInstance().getAllSubjects().stream().sorted().forEach(log::info);
         SharedMockSchemaRegistryClient.getInstance().getAllSubjects()
+                .stream()
+                .sorted()
                 .forEach(subject -> {
                     try {
-                        log.info("!!! SUBJECT= {}", subject);
                         var meta = SharedMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
-                        log.info("!!! id = {}, schema = {}", meta.getId(), meta.getSchema());
+                        log.info("!!! subject={}, id={}, schema={}", subject, meta.getId(), meta.getSchema());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

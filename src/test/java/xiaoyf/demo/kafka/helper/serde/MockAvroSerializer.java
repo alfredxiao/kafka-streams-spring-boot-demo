@@ -5,6 +5,7 @@ import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.extern.slf4j.Slf4j;
 
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 @Slf4j
@@ -28,10 +29,18 @@ public class MockAvroSerializer extends KafkaAvroSerializer {
         log.info("!!! @{} .serialize() topic: {}, class: {}, record:{}",
                 this.hashCode(), topic, record.getClass().getName(), record);
 
-        if ("kafka-demo-ORDER-JOINS-CUST-DETAILS-changelog".equals(topic)) {
-            int c = 3;
+        byte[] bytes = super.serialize(topic, record);
+        log.info("!!! serialized as bytes: {}, id: {}", bytes.length, readId(bytes));
+        return bytes;
+    }
+
+    private int readId(byte[] bytes) {
+        if (bytes.length < 5) {
+            // this is not Avro bytes containing id
+            return -2;
         }
 
-        return super.serialize(topic, record);
+        ByteBuffer buffer = ByteBuffer.wrap(bytes, 1, 4);
+        return buffer.getInt();
     }
 }
