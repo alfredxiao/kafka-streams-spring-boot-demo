@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD;
 import static xiaoyf.demo.kafka.helper.Const.*;
+import static xiaoyf.demo.kafka.helper.Dumper.dumpTopicAndSchemaList;
 import static xiaoyf.demo.kafka.helper.Fixtures.*;
 
 @SpringBootTest
@@ -67,24 +68,13 @@ class KafkaDemoApplicationTests {
 		    Awaitility.await().timeout(20, TimeUnit.SECONDS).until(() ->
 				    testListeners.outputs.size() == 1);
 
+        dumpTopicAndSchemaList();
+
 		    var output = testListeners.outputs.get(0);
         var premium = premiumOrder(123, 100, "iPhone", "1500", "GoHigh", "Alfred", "a@g.com");
 
         assertThat(output.key()).isEqualTo(premium.key);
         assertThat(output.value()).isEqualTo(premium.value);
-
-        log.info("!!! SUBJECT LIST");
-        SharedMockSchemaRegistryClient.getInstance().getAllSubjects()
-                .stream()
-                .sorted()
-                .forEach(subject -> {
-                    try {
-                        var meta = SharedMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
-                        log.info("!!! subject={}, id={}, schema={}", subject, meta.getId(), meta.getSchema());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                });
     }
 
     @Test

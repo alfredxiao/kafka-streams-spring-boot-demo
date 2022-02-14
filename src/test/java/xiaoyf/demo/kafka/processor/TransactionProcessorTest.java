@@ -37,8 +37,7 @@ import static xiaoyf.demo.kafka.helper.Const.APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAILS_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
-import static xiaoyf.demo.kafka.helper.Dumper.dumpTestDriverStats;
-import static xiaoyf.demo.kafka.helper.Dumper.log;
+import static xiaoyf.demo.kafka.helper.Dumper.*;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerDetail;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerOrder;
 import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
@@ -77,7 +76,7 @@ class TransactionProcessorTest {
 
 
     @Test
-    void shouldRaisePremiumOrder() {
+    void shouldRaisePremiumOrder() throws Exception {
         final var custOrders = List.of(
                 customerOrder(123, 100, "iPhone", "1500", "GoHigh")
         );
@@ -99,7 +98,7 @@ class TransactionProcessorTest {
             List<TestRecord<CustomerOrderKey, CustomerOrder>> custOrders,
             List<TestRecord<CustomerDetailsKey, CustomerDetails>> custDetails,
             List<KeyValue<PremiumOrderKey, PremiumOrder>> premOrders
-    ) {
+    ) throws Exception {
 
         final Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_ID);
@@ -110,7 +109,7 @@ class TransactionProcessorTest {
 
         final Topology topology = streamsBuilder.build(props);
 
-        log(" topology:" + topology.describe());
+        dumpTopology(topology);
 
         try (final TopologyTestDriver testDriver = new TopologyTestDriver(topology, props)) {
             final TestInputTopic<CustomerOrderKey, CustomerOrder> orders = testDriver
@@ -130,6 +129,7 @@ class TransactionProcessorTest {
             details.pipeRecordList(custDetails);
 
             dumpTestDriverStats(testDriver);
+            dumpTopicAndSchemaList();
 
             assertThat(output.readKeyValuesToList()).isEqualTo(premOrders);
         }
