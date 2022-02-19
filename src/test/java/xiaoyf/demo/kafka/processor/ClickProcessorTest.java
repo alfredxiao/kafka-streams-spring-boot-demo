@@ -43,7 +43,7 @@ class ClickProcessorTest {
 
         final Topology topology = streamsBuilder.build(props);
 
-        dumpTopology(topology);
+        dumpTopology("clickProcessor", topology);
 
         try (final TopologyTestDriver testDriver = new TopologyTestDriver(topology, props)) {
             final TestInputTopic<String, String> clicks = testDriver
@@ -79,7 +79,7 @@ class ClickProcessorTest {
 
     @TestConfiguration
     static class ProcessorConfig {
-        @Bean
+        @Bean("defaultKafkaStreamsBuilder")
         StreamsBuilder streamsBuilder() {
             return new StreamsBuilder();
         }

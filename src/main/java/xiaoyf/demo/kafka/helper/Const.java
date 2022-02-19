@@ -8,5 +8,8 @@ public interface Const {
     String CLICK_TOPIC = "click";
     String LOCATION_TOPIC = "location";
 
+    String ANOTHER_TOPIC = "another-topic";
+    String ANOTHER_TOPIC_DOUBLED = "another-topic-doubled";
+
     String APPLICATION_ID = "kafka-demo";
 }

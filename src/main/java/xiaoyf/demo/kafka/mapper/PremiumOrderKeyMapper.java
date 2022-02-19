@@ -1,6 +1,5 @@
 package xiaoyf.demo.kafka.mapper;
 
-import demo.model.CustomerOrder;
 import demo.model.CustomerOrderKey;
 import demo.model.PremiumOrder;
 import demo.model.PremiumOrderKey;

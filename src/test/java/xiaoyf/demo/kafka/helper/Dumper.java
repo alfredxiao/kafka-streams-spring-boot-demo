@@ -20,8 +20,8 @@ public class Dumper {
         }
     }
 
-    public static void dumpTopology(final Topology topology) {
-        log("Topology");
+    public static void dumpTopology(final String name, final Topology topology) {
+        log("Topology " + name);
         log(topology.describe());
     }
 

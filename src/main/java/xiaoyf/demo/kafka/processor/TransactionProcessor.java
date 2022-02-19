@@ -15,6 +15,7 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.filter.BigPurchaseFilter;
 import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
@@ -39,7 +40,7 @@ public class TransactionProcessor {
     private final PremiumOrderKeyMapper keyMapper;
 
     @Autowired
-    public void process(StreamsBuilder builder) {
+    public void process(@Qualifier("defaultKafkaStreamsBuilder")StreamsBuilder builder) {
         log.info("TransactionProcessor use builder:" + builder);
 
         KTable<CustomerDetailsKey, CustomerDetails> customerDetails =

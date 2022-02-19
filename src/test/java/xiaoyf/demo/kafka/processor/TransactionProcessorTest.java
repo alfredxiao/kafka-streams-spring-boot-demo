@@ -29,6 +29,7 @@ import xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde;
 import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
 import xiaoyf.demo.kafka.mapper.PremiumOrderKeyMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -76,7 +77,6 @@ class TransactionProcessorTest {
         premiumOrderSerde = (Serde<PremiumOrder>) singleton;
     }
 
-
     @Test
     void shouldRaisePremiumOrder() throws Exception {
         final var custOrders = List.of(
@@ -91,9 +91,20 @@ class TransactionProcessorTest {
         );
 
         verify(custOrders, custDetails, premiumOrders);
+    }
 
-        System.out.println(custDetails);
+    @Test
+    void shouldNotRaisePremiumOrder() throws Exception {
+        final var custOrders = List.of(
+                customerOrder(123, 100, "iPhone", "1500", "GoHigh")
+        );
+        final var custDetails = List.of(
+                customerDetail(200, "Derek", "d@g.com", "GoFar")
+        );
 
+        final var premiumOrders = new ArrayList<KeyValue<PremiumOrderKey, PremiumOrder>>();
+
+        verify(custOrders, custDetails, premiumOrders);
     }
 
     void verify(
@@ -111,7 +122,7 @@ class TransactionProcessorTest {
 
         final Topology topology = streamsBuilder.build(props);
 
-        dumpTopology(topology);
+        dumpTopology("transactionProcessor", topology);
 
         try (final TopologyTestDriver testDriver = new TopologyTestDriver(topology, props)) {
             final TestInputTopic<CustomerOrderKey, CustomerOrder> orders = testDriver
@@ -139,7 +150,7 @@ class TransactionProcessorTest {
 
     @TestConfiguration
     static class ProcessorConfig {
-        @Bean
+        @Bean("defaultKafkaStreamsBuilder")
         StreamsBuilder streamsBuilder() {
             return new StreamsBuilder();
         }
