@@ -5,7 +5,6 @@ import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.test.TestRecord;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 public class Fixtures {

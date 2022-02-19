@@ -2,6 +2,7 @@ package xiaoyf.demo.kafka.helper;
 
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
+import org.springframework.context.ApplicationContext;
 import xiaoyf.demo.kafka.helper.serde.SharedMockSchemaRegistryClient;
 
 import java.util.Arrays;
@@ -10,12 +11,21 @@ import static java.lang.String.format;
 
 public class Dumper {
 
-    public static void dumpTopology(Topology topology) {
-        log("=== ");
+    public static void dumpAllBeans(final ApplicationContext applicationContext) {
+        String[] allBeanNames = applicationContext.getBeanDefinitionNames();
+        for(String beanName : allBeanNames) {
+            var bean = applicationContext.getBean(beanName);
+
+            log(format("Bean name: %s, class: %s, hashCode: %d", beanName, bean.getClass().getName(), bean.hashCode()));
+        }
+    }
+
+    public static void dumpTopology(final Topology topology) {
+        log("Topology");
         log(topology.describe());
     }
 
-    public static void dumpTestDriverStats(TopologyTestDriver driver) {
+    public static void dumpTestDriverStats(final TopologyTestDriver driver) {
 
         log("=== produced topic names:");
         driver.producedTopicNames().forEach(Dumper::log);
@@ -28,7 +38,7 @@ public class Dumper {
     }
 
     public static void log(Object ...obj) {
-        Arrays.stream(obj).forEach(e -> System.out.println("  === " + e));
+        Arrays.stream(obj).forEach(e -> System.out.println("  DEMOLOG: " + e));
     }
 
     public static void dumpTopicAndSchemaList() throws Exception {

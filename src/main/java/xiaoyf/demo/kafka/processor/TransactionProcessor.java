@@ -6,21 +6,33 @@ import demo.model.CustomerDetailsKey;
 import demo.model.CustomerOrder;
 import demo.model.CustomerOrderKey;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.kstream.Consumed;
+import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Named;
+import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import xiaoyf.demo.kafka.filter.BigCampaignPurchase;
+import xiaoyf.demo.kafka.filter.BigPurchaseFilter;
 import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
 import xiaoyf.demo.kafka.mapper.PremiumOrderKeyMapper;
 
-import static xiaoyf.demo.kafka.helper.Const.*;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAIL_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
 
+/**
+ * TransactionProcessor demonstrates a foreign key table-table left join.
+ */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class TransactionProcessor {
 
-    private final BigCampaignPurchase bigPurchase;
+    private final BigPurchaseFilter bigPurchase;
 
     private final PremiumTransactionValueJoiner valueJoiner;
 
@@ -28,17 +40,17 @@ public class TransactionProcessor {
 
     @Autowired
     public void process(StreamsBuilder builder) {
-        System.out.println("==== process");
+        log.info("TransactionProcessor use builder:" + builder);
 
         KTable<CustomerDetailsKey, CustomerDetails> customerDetails =
-                builder.table(CUSTOMER_DETAILS_TOPIC, Consumed.as("CUST-DETAILS-TABLE"), Materialized.as("CUST-DETAILS-TABLE-STORE"));
+                builder.table(CUSTOMER_DETAIL_TOPIC, Consumed.as("CUST-DETAILS-TABLE"), Materialized.as("CUST-DETAIL-TABLE-STORE"));
 
         KStream<CustomerOrderKey, CustomerOrder> transactions = builder.stream(CUSTOMER_ORDER_TOPIC, Consumed.as("CUSTOMER-ORDER-STREAM"));
 
         transactions
                 .filter(bigPurchase, Named.as("FILTER-BIG-PURCHASE"))
                 .toTable(Named.as("CUST-ORDER-TABLE"), Materialized.as("CUST-ORDER-TABLE-STORE"))
-                .join(customerDetails, this::extractForeignKey, valueJoiner, Named.as("ORDER-JOINS-CUST-DETAILS"), Materialized.as("ORDER-JOINS-CUST-DETAILS-STORE"))
+                .join(customerDetails, this::extractForeignKey, valueJoiner, Named.as("ORDER-JOINS-CUST-DETAIL"), Materialized.as("ORDER-JOINS-CUST-DETAIL-STORE"))
                 .toStream(Named.as("TO-JOINED-ORDER"))
                 .filter((key, value) -> value != null, Named.as("FILTER-ONLY-MATCHED"))
                 .selectKey(keyMapper, Named.as("SELECT-PREMIUM-ORDER-KEY"))

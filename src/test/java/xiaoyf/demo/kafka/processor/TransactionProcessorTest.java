@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import xiaoyf.demo.kafka.filter.BigCampaignPurchase;
+import xiaoyf.demo.kafka.filter.BigPurchaseFilter;
 import xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde;
 import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
 import xiaoyf.demo.kafka.mapper.PremiumOrderKeyMapper;
@@ -34,22 +34,24 @@ import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static xiaoyf.demo.kafka.helper.Const.APPLICATION_ID;
-import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAILS_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAIL_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
-import static xiaoyf.demo.kafka.helper.Dumper.*;
+import static xiaoyf.demo.kafka.helper.Dumper.dumpTestDriverStats;
+import static xiaoyf.demo.kafka.helper.Dumper.dumpTopicAndSchemaList;
+import static xiaoyf.demo.kafka.helper.Dumper.dumpTopology;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerDetail;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerOrder;
 import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
 
 @SpringBootTest(classes = {
         TransactionProcessor.class,
-        BigCampaignPurchase.class,
+        BigPurchaseFilter.class,
         PremiumTransactionValueJoiner.class,
         PremiumOrderKeyMapper.class
 })
 @Import(TransactionProcessorTest.ProcessorConfig.class)
-@Tag("IntegratedUnitTest")
+@Tag("PartialIntegrationTest")
 class TransactionProcessorTest {
 
     @Autowired
@@ -117,7 +119,7 @@ class TransactionProcessorTest {
                             customerOrderKeySerde.serializer(),
                             customerOrderSerde.serializer());
             final TestInputTopic<CustomerDetailsKey, CustomerDetails> details = testDriver
-                    .createInputTopic(CUSTOMER_DETAILS_TOPIC,
+                    .createInputTopic(CUSTOMER_DETAIL_TOPIC,
                             customerDetailsKeySerde.serializer(),
                             customerDetailsSerde.serializer());
             final TestOutputTopic<PremiumOrderKey, PremiumOrder> output = testDriver
