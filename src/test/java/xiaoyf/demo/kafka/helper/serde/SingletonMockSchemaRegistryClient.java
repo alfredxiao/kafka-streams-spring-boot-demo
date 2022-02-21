@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * SharedMockSchemaRegistryClient makes several public methods from MockSchemaRegistryClient 'synchronized'
+ * SingletonMockSchemaRegistryClient makes several public methods from MockSchemaRegistryClient 'synchronized'
  * with the hope that it is thread-safe and can be shared between threads in tests. In fact, current test
  * all single threaded so far, and this class is implemented in a naive way, and it is probably not easy
  * to really make it thread-safe otherwise parent class MockSchemaRegistryClient would have done this.
  */
-public class SharedMockSchemaRegistryClient extends MockSchemaRegistryClient {
+public class SingletonMockSchemaRegistryClient extends MockSchemaRegistryClient {
 
-    private static final SharedMockSchemaRegistryClient INSTANCE = new SharedMockSchemaRegistryClient();
+    private static final SingletonMockSchemaRegistryClient INSTANCE = new SingletonMockSchemaRegistryClient();
 
-    private SharedMockSchemaRegistryClient() {
+    private SingletonMockSchemaRegistryClient() {
     }
 
-    public static SharedMockSchemaRegistryClient getInstance() {
+    public static SingletonMockSchemaRegistryClient getInstance() {
         return INSTANCE;
     }
 

@@ -5,9 +5,8 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyDescription;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.springframework.context.ApplicationContext;
-import xiaoyf.demo.kafka.helper.serde.SharedMockSchemaRegistryClient;
+import xiaoyf.demo.kafka.helper.serde.SingletonMockSchemaRegistryClient;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import static java.lang.String.format;
@@ -50,12 +49,12 @@ public class Dumper {
 
     public static void dumpTopicAndSchemaList() throws Exception {
         log.info("!!! SUBJECT LIST");
-        SharedMockSchemaRegistryClient.getInstance().getAllSubjects()
+        SingletonMockSchemaRegistryClient.getInstance().getAllSubjects()
                 .stream()
                 .sorted()
                 .forEach(subject -> {
                     try {
-                        var meta = SharedMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
+                        var meta = SingletonMockSchemaRegistryClient.getInstance().getLatestSchemaMetadata(subject);
                         log.info("!!! subject={}, id={}, schema={}", subject, meta.getId(), meta.getSchema());
                     } catch (Exception e) {
                         e.printStackTrace();

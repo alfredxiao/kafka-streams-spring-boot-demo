@@ -25,10 +25,11 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import xiaoyf.demo.kafka.filter.BigPurchaseFilter;
-import xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde;
+import xiaoyf.demo.kafka.helper.serde.MockSerde;
 import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
 import xiaoyf.demo.kafka.mapper.PremiumOrderKeyMapper;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -68,7 +69,7 @@ class TransactionProcessorTest {
     @BeforeEach
     @SuppressWarnings("unchecked")
     void setup() {
-        Serde<?> singleton = new MockSpecificAvroSerde<>();
+        Serde<?> singleton = new MockSerde<>();
         customerOrderKeySerde = (Serde<CustomerOrderKey>) singleton;
         customerOrderSerde = (Serde<CustomerOrder>) singleton;
         customerDetailsKeySerde = (Serde<CustomerDetailsKey>) singleton;
@@ -80,14 +81,14 @@ class TransactionProcessorTest {
     @Test
     void shouldRaisePremiumOrder() throws Exception {
         final var custOrders = List.of(
-                customerOrder(123, 100, "iPhone", "1500", "GoHigh")
+                customerOrder(123, 100, "iPhone", new BigDecimal("1500"), "GoHigh")
         );
         final var custDetails = List.of(
                 customerDetail(100, "Alfred", "a@g.com", "GoHigh", "GoFar")
         );
 
         final var premiumOrders = List.of(
-                premiumOrder(123, 100, "iPhone", "1500", "GoHigh", "Alfred", "a@g.com")
+                premiumOrder(123, 100, "iPhone", new BigDecimal("1500"), "GoHigh", "Alfred", "a@g.com")
         );
 
         verify(custOrders, custDetails, premiumOrders);
@@ -96,7 +97,7 @@ class TransactionProcessorTest {
     @Test
     void shouldNotRaisePremiumOrder() throws Exception {
         final var custOrders = List.of(
-                customerOrder(123, 100, "iPhone", "1500", "GoHigh")
+                customerOrder(123, 100, "iPhone", new BigDecimal("1500"), "GoHigh")
         );
         final var custDetails = List.of(
                 customerDetail(200, "Derek", "d@g.com", "GoFar")
@@ -117,8 +118,8 @@ class TransactionProcessorTest {
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_ID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy");
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MockSpecificAvroSerde.class);
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MockSpecificAvroSerde.class);
+        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MockSerde.class);
+        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, MockSerde.class);
 
         final Topology topology = streamsBuilder.build(props);
 

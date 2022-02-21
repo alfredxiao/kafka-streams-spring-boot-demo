@@ -13,7 +13,7 @@ public class Fixtures {
             long orderNum,
             long custNum,
             String prodName,
-            String amount,
+            BigDecimal amount,
             String campaign
     ) {
         var key = CustomerOrderKey.newBuilder()
@@ -24,7 +24,7 @@ public class Fixtures {
                 .setOrderNumber(orderNum)
                 .setCustomerNumber(custNum)
                 .setProductName(prodName)
-                .setAmount(new BigDecimal(amount))
+                .setAmount(amount)
                 .setCampaign(campaign)
                 .build();
 
@@ -55,7 +55,7 @@ public class Fixtures {
             long orderNum,
             long custNum,
             String prodName,
-            String amount,
+            BigDecimal amount,
             String campaign,
             String name,
             String email
@@ -69,7 +69,7 @@ public class Fixtures {
                 .setOrderNumber(orderNum)
                 .setCustomerNumber(custNum)
                 .setProductName(prodName)
-                .setAmount(new BigDecimal(amount))
+                .setAmount(amount)
                 .setCampaign(campaign)
                 .setName(name)
                 .setEmail(email)

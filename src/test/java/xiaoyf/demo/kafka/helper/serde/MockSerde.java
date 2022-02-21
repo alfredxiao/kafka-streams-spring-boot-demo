@@ -8,13 +8,13 @@ import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
 
-public class MockSpecificAvroSerde<T> implements Serde<T>, Serializer<T>, Deserializer<T> {
+public class MockSerde<T> implements Serde<T>, Serializer<T>, Deserializer<T> {
     private final KafkaAvroSerializer serializer;
     private final KafkaAvroDeserializer deserializer;
 
-    public MockSpecificAvroSerde() {
-        this.serializer = new MockAvroSerializer();
-        this.deserializer = new MockAvroDeserializer();
+    public MockSerde() {
+        this.serializer = new MockSerializer();
+        this.deserializer = new MockDeserializer();
     }
 
     @Override
