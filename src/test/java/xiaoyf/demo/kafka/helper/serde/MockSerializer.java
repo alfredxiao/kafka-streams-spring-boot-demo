@@ -6,6 +6,7 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.specific.SpecificRecord;
 
 import java.nio.ByteBuffer;
+import java.util.Objects;
 
 @Slf4j
 public class MockSerializer extends KafkaAvroSerializer {
@@ -19,6 +20,10 @@ public class MockSerializer extends KafkaAvroSerializer {
 
     @Override
     public byte[] serialize(String topic, Object record) {
+        if (Objects.isNull(record)) {
+            return null;
+        }
+
         log.info("!!! @{} .serialize() topic: {}, class: {}, record:{}",
                 this.hashCode(), topic, record.getClass().getName(), record);
 

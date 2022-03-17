@@ -9,19 +9,20 @@ spring:
       basic.auth.user.info: dummy
       specific.avro.reader: true
       spring.deserializer:
-        key.delegate.class: xiaoyf.demo.kafka.helper.serde.MockAvroDeserializer
-        value.delegate.class: xiaoyf.demo.kafka.helper.serde.MockAvroDeserializer
+        key.delegate.class: xiaoyf.demo.kafka.helper.serde.MockDeserializer
+        value.delegate.class: xiaoyf.demo.kafka.helper.serde.MockDeserializer
     streams:
       application-id: kafka-demo
       properties:
         replication.factor: 1
         state.dir: ./build/tmp/state-dir
         processing.guarantee: exactly_once
-        default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde
-        default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSpecificAvroSerde
+        num.stream.threads: 2
+        default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
+        default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
     producer:
-      key-serializer: xiaoyf.demo.kafka.helper.serde.MockAvroSerializer
-      value-serializer: xiaoyf.demo.kafka.helper.serde.MockAvroSerializer
+      key-serializer: xiaoyf.demo.kafka.helper.serde.MockSerializer
+      value-serializer: xiaoyf.demo.kafka.helper.serde.MockSerializer
     consumer:
       group-id: test-group
 #      enable.auto.commit: false
