@@ -1,0 +1,49 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.4'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "com.github.davidmc24.gradle.plugin.avro" version "1.0.0"
+	id 'java'
+}
+
+group = 'xiaoyf.demo.kafka'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven { url "https://packages.confluent.io/maven/" }
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-streams-test-utils'
+	implementation 'org.apache.avro:avro:1.11.0'
+	implementation 'io.confluent:kafka-avro-serializer:7.0.1'
+	implementation 'io.confluent:kafka-streams-avro-serde:7.0.1'
+	implementation 'io.confluent:kafka-schema-serializer:7.0.1'
+//	implementation 'org.apache.commons:commons-lang3:3.12.0'
+//	implementation 'org.apache.kafka:kafka-clients:2.8.1'
+//	implementation 'org.slf4j:slf4j-api:1.7.36'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+	testImplementation 'org.awaitility:awaitility:4.1.1'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

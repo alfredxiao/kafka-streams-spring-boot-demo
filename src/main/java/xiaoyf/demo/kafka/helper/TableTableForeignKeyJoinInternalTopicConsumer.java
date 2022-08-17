@@ -24,7 +24,11 @@ import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAIL_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
 
-public class BytesConsumer {
+/**
+ * TableTableForeignKeyJoinInternalTopicConsumer is a naive tool aiming to read messages  written to internal topics
+ * as part of a table-table fk join.
+ */
+public class TableTableForeignKeyJoinInternalTopicConsumer {
     public static void main(String[] args) {
         Properties props = new Properties();
 
