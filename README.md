@@ -4,13 +4,36 @@ This repository aims to provide some working code examples for spring boot based
 # Features 
 - table-table fk join
 - stream-table join
+- multiple topology application
+- test utils for testing streams with avro
 - [todo] interactive query
 - [todo] exception handling?
+- [todo] use.latest.version
 
-# Usage
+# Table-Table Join
+- both tables have to be materialised for the topology to run
+- See `TableTableForeignKeyJoinProcessor`
+
+# Stream-Table Join
+- See `StreamTableJoinProcessor`
+
+# Multiple Topology Application
+Demonstrates how a SpringBoot application can run multiple topologies. See `SecondaryTopologyConfiguration`
+
+# Testing Streams with Avro
+- See package `xiaoyf.demo.kafka.helper.serde`
+
+# Interactive Query
+
+# Error Handling
+- todo
+
+# `use.latest.version`
+- todo
 
 # Notes
-## SUBJECT LIST
+## SUBJECT LIST for Table-Table FK Join
+below are subjects created in schema registry related to the table-table fk join.
 ```
 subject=customer-details-key, id=3, schema={"type":"record","name":"CustomerDetailsKey","namespace":"demo.model","fields":[{"name":"customerNumber","type":"long"}]}
 subject=customer-details-value, id=4, schema={"type":"record","name":"CustomerDetails","namespace":"demo.model","fields":[{"name":"customerNumber","type":"long"},{"name":"name","type":{"type":"string","avro.java.string":"String"}},{"name":"email","type":{"type":"string","avro.java.string":"String"}},{"name":"activeCampaigns","type":{"type":"array","items":{"type":"string","avro.java.string":"String"}}}]}
