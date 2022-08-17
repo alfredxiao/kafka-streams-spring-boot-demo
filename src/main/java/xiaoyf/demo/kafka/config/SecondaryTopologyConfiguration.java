@@ -15,20 +15,25 @@ import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 
 import java.util.Map;
 
+import static xiaoyf.demo.kafka.helper.Const.LONG_NUMBER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.LONG_NUMBER_DOUBLED_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.SECONDARY_APPLICATION_ID;
+
 /**
- * AnotherTopologyConfiguration demonstrates you can run two topology in the same SpringBoot
- * application.
+ * AnotherTopologyConfiguration demonstrates you can run more than one topology in the same SpringBoot
+ * application. This class also demonstrates another way to create a topology - by returning a bean of
+ * type KStream.
  */
 @Configuration
 @Slf4j
-public class AnotherTopologyConfiguration {
-    @Bean("anotherStreamBuilder")
-    public StreamsBuilderFactoryBean anotherStreamBuilderFactoryBean(KafkaProperties props) {
+public class SecondaryTopologyConfiguration {
+    @Bean("secondaryKafkaStreamBuilder")
+    public StreamsBuilderFactoryBean secondaryKafkaStreamBuilderFactoryBean(KafkaProperties props) {
 
         Map<String, Object> config = props.buildStreamsProperties();
-        log.info("anotherStreamBuilder built on top of kafka props: {}", config);
+        log.info("secondaryKafkaStreamBuilder built on top of kafka props: {}", config);
 
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, "another-kafka-demo");
+        config.put(StreamsConfig.APPLICATION_ID_CONFIG, SECONDARY_APPLICATION_ID);
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.LongSerde.class);
         config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.LongSerde.class);
 
@@ -36,16 +41,16 @@ public class AnotherTopologyConfiguration {
     }
 
     @Bean
-    public KStream<Long, Long> startProcessing(@Qualifier("anotherStreamBuilder") StreamsBuilder builder) {
+    public KStream<Long, Long> secondaryProcessing(@Qualifier("secondaryKafkaStreamBuilder") StreamsBuilder builder) {
 
-        final KStream<Long, Long> toDouble = builder.stream("another-topic");
+        final KStream<Long, Long> toDouble = builder.stream(LONG_NUMBER_TOPIC);
 
         toDouble
                 .map((key, value) -> {
                     log.info("Processing long message: {}, {}", key, value);
                     return KeyValue.pair(key, value * 2);
                 })
-                .to("another-topic-doubled"); // send downstream to another topic
+                .to(LONG_NUMBER_DOUBLED_TOPIC); // send downstream to another topic
 
         return toDouble;
     }

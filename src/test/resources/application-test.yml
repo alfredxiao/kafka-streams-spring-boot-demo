@@ -18,6 +18,7 @@ spring:
         state.dir: ./build/tmp/state-dir
         processing.guarantee: exactly_once
         num.stream.threads: 2
+        compression.type: snappy
         default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
         default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
     producer:

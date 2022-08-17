@@ -10,11 +10,11 @@ import java.util.Objects;
 
 @Component
 public class BigPurchaseFilter implements Predicate<CustomerOrderKey, CustomerOrder> {
-    private static final BigDecimal PREMIUM_STANDARD = new BigDecimal("1000.00");
+    private static final BigDecimal BIG_PURCHASE_THRESHOLD = new BigDecimal("1000.00");
 
     @Override
     public boolean test(CustomerOrderKey key, CustomerOrder value) {
         return Objects.nonNull(value.getCampaign())
-                && value.getAmount().compareTo(PREMIUM_STANDARD) >= 0;
+                && value.getAmount().compareTo(BIG_PURCHASE_THRESHOLD) >= 0;
     }
 }

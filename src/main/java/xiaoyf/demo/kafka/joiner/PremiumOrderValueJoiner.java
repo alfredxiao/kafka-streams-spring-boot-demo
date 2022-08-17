@@ -9,20 +9,26 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+/**
+ * PremiumOrderValueJoiner serves to purposes here: 1. joins order and customer details to form a new object - premium
+ * order; 2. filters only matched customers, otherwise return null.
+ */
 @Component
 @Slf4j
-public class PremiumTransactionValueJoiner implements ValueJoiner<CustomerOrder, CustomerDetails, PremiumOrder> {
+public class PremiumOrderValueJoiner implements ValueJoiner<CustomerOrder, CustomerDetails, PremiumOrder> {
 
     @Override
     public PremiumOrder apply(CustomerOrder customerOrder, CustomerDetails customerDetails) {
-        log.info("PremiumTransactionValueJoiner joining...{}, {}", customerOrder, customerDetails);
+        log.info("PremiumOrderValueJoiner joining...{}, {}", customerOrder, customerDetails);
         var activeCampaigns = customerDetails.getActiveCampaigns();
 
         if (Objects.isNull(activeCampaigns)) {
+            log.info("customer joins no campaigns, ignore order");
             return null;
         }
 
         if (!activeCampaigns.contains(customerOrder.getCampaign())) {
+            log.info("order not matching customer's campaigns, ignore order");
             return null;
         }
 

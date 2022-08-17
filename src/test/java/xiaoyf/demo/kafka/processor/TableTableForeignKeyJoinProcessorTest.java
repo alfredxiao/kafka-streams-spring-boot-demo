@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import xiaoyf.demo.kafka.filter.BigPurchaseFilter;
 import xiaoyf.demo.kafka.helper.serde.MockSerde;
-import xiaoyf.demo.kafka.joiner.PremiumTransactionValueJoiner;
+import xiaoyf.demo.kafka.joiner.PremiumOrderValueJoiner;
 import xiaoyf.demo.kafka.mapper.PremiumOrderKeyMapper;
 
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Properties;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static xiaoyf.demo.kafka.helper.Const.APPLICATION_ID;
+import static xiaoyf.demo.kafka.helper.Const.PRIMARY_APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAIL_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
@@ -47,14 +47,14 @@ import static xiaoyf.demo.kafka.helper.Fixtures.customerOrder;
 import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
 
 @SpringBootTest(classes = {
-        TransactionProcessor.class,
+        TableTableForeignKeyJoinProcessor.class,
         BigPurchaseFilter.class,
-        PremiumTransactionValueJoiner.class,
+        PremiumOrderValueJoiner.class,
         PremiumOrderKeyMapper.class
 })
-@Import(TransactionProcessorTest.ProcessorConfig.class)
+@Import(TableTableForeignKeyJoinProcessorTest.ProcessorConfig.class)
 @Tag("PartialIntegrationTest")
-class TransactionProcessorTest {
+class TableTableForeignKeyJoinProcessorTest {
 
     @Autowired
     StreamsBuilder streamsBuilder;
@@ -115,7 +115,7 @@ class TransactionProcessorTest {
     ) throws Exception {
 
         final Properties props = new Properties();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_ID);
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, PRIMARY_APPLICATION_ID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, MockSerde.class);

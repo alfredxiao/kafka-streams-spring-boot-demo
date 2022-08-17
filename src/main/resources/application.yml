@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: kafka-demo
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      schema.registry.url: http://localhost:8081
+#      basic.auth.credentials.source: dummy
+#      basic.auth.user.info: dummy
+#      specific.avro.reader: true
+    streams:
+      application-id: kafka-demo
+      properties:
+        replication.factor: 1
+        num.stream.threads: 1
+        state.dir: ./build/tmp/state-dir
+        processing.guarantee: exactly_once
+        default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+
+logging:
+  level:
+    root: INFO

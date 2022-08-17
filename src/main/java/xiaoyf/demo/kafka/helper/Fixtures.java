@@ -1,6 +1,11 @@
 package xiaoyf.demo.kafka.helper;
 
-import demo.model.*;
+import demo.model.CustomerDetails;
+import demo.model.CustomerDetailsKey;
+import demo.model.CustomerOrder;
+import demo.model.CustomerOrderKey;
+import demo.model.PremiumOrder;
+import demo.model.PremiumOrderKey;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.test.TestRecord;
 

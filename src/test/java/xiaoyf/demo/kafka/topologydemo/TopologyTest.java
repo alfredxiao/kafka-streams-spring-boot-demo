@@ -26,10 +26,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static xiaoyf.demo.kafka.helper.Const.APPLICATION_ID;
+import static xiaoyf.demo.kafka.helper.Const.PRIMARY_APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Dumper.dumpTestDriverStats;
 import static xiaoyf.demo.kafka.helper.Dumper.dumpTopology;
 
+/**
+ * TopologyTest demonstrates unit testing topologies with tables in it.
+ */
 @Slf4j
 public class TopologyTest {
 
@@ -183,7 +186,7 @@ public class TopologyTest {
     private Properties defaultProperties() {
         final Properties props = new Properties();
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, APPLICATION_ID);
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, PRIMARY_APPLICATION_ID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
         props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy");
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class);

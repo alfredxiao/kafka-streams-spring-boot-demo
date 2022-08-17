@@ -6,10 +6,10 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 
 @SpringBootApplication
 @EnableKafkaStreams
-public class KafkaDemoApplication {
+public class SpringBootKafkaStreamsDemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(KafkaDemoApplication.class, args);
+		SpringApplication.run(SpringBootKafkaStreamsDemoApplication.class, args);
 	}
 
 }
