@@ -3,36 +3,33 @@ package xiaoyf.demo.kafka.config;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
-import org.apache.kafka.clients.admin.ListTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.StreamsConfig;
-import org.apache.kafka.streams.kstream.KStream;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.kafka.config.KafkaStreamsConfiguration;
-import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 import xiaoyf.demo.kafka.helper.Const;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 
+import static xiaoyf.demo.kafka.helper.Const.CLICK_PLUS_LOCATION_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.CLICK_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.*;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_DETAIL_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_ORDER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.LOCATION_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.LONG_NUMBER_DOUBLED_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.LONG_NUMBER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORISED_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORY_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.MCC_TRANSACTION_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.PRIMARY_APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Const.SECONDARY_APPLICATION_ID;
+import static xiaoyf.demo.kafka.helper.Const.STREAM1_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.STREAM2_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
 
 
 @Configuration
