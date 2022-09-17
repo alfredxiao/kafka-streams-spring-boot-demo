@@ -4,6 +4,7 @@ import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Deserializer;
+import xiaoyf.demo.kafka.helper.Const;
 
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;

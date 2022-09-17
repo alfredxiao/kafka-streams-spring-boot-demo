@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topologydemo;
+package xiaoyf.demo.kafka.topology;
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import static xiaoyf.demo.kafka.helper.Dumper.dumpTopology;
  * TopologyTest demonstrates unit testing topologies with tables in it.
  */
 @Slf4j
-public class TopologyTest {
+public class TopologyDemoTest {
 
     @Test
     public void table() {

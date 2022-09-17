@@ -11,6 +11,6 @@ import static java.lang.String.format;
 public class ClickLocationValueJoiner implements ValueJoiner<String, String, String> {
     @Override
     public String apply(String click, String location) {
-        return format("%s from %s", click, location);
+        return format("%s accessed from %s", click, location);
     }
 }

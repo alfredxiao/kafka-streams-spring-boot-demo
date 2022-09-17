@@ -17,8 +17,8 @@ spring:
         replication.factor: 1
         state.dir: ./build/tmp/state-dir
         processing.guarantee: exactly_once
-        num.stream.threads: 2
-        compression.type: snappy
+        num.stream.threads: 1
+        commit.interval.ms: 1
         default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
         default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
     producer:
@@ -32,3 +32,5 @@ spring:
       auto-offset-reset: earliest
     listener:
       ack-mode: MANUAL_IMMEDIATE
+
+init-create-topics: false

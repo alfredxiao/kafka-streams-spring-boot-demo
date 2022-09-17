@@ -21,3 +21,5 @@ spring:
 logging:
   level:
     root: INFO
+
+init-create-topics: true

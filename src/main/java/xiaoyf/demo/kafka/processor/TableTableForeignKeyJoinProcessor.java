@@ -43,6 +43,7 @@ public class TableTableForeignKeyJoinProcessor {
     // StreamsBuilder instance then
     @Autowired
     public void process(@Qualifier("defaultKafkaStreamsBuilder") StreamsBuilder builder) {
+        log.info("TableTableForeignKeyJoinProcessor use builder:" + builder);
 
         KTable<CustomerDetailsKey, CustomerDetails> customerDetails =
                 builder.table(CUSTOMER_DETAIL_TOPIC, Consumed.as("CUST-DETAILS-TABLE"), Materialized.as("CUST-DETAIL-TABLE-STORE"));

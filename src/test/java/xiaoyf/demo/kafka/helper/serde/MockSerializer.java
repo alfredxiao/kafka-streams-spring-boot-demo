@@ -4,6 +4,7 @@ import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.specific.SpecificRecord;
+import xiaoyf.demo.kafka.helper.Const;
 
 import java.nio.ByteBuffer;
 import java.util.Objects;

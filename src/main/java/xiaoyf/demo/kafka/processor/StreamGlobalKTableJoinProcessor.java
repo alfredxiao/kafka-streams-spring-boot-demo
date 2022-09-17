@@ -3,6 +3,7 @@ package xiaoyf.demo.kafka.processor;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.GlobalKTable;
@@ -13,10 +14,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.joiner.ClickLocationValueJoiner;
 
-import static xiaoyf.demo.kafka.helper.Const.CLICK_PLUS_LOCATION_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.CLICK_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.LOCATION_TOPIC;
-import static xiaoyf.demo.kafka.helper.Serdes.stringSerde;
+import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORISED_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORY_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.MCC_TRANSACTION_TOPIC;
 
 /**
  * StreamGlobalKTableJoinProcessor demonstrates a stream-globalktable join.
@@ -26,20 +26,24 @@ import static xiaoyf.demo.kafka.helper.Serdes.stringSerde;
 @Slf4j
 public class StreamGlobalKTableJoinProcessor {
 
-    private final ClickLocationValueJoiner valueJoiner;
-
-    // If there is no need for running multiple topologies, no 'Qualifier' is needed because there is only one
-    // StreamsBuilder instance then
+    private final Serde<String> stringSerde;
+    
+    // 'click' topic already used by another processor, hence choose another streambuilder instance
+    // such that they appear in different topology
     @Autowired
-    public void process(@Qualifier("defaultKafkaStreamsBuilder") StreamsBuilder builder) {
+    public void process(@Qualifier("secondaryKafkaStreamBuilder") StreamsBuilder builder) {
         log.info("StreamGlobalKTableJoinProcessor use builder:" + builder);
 
-        KStream<String, String> transactions = builder.stream(CLICK_TOPIC, Consumed.with(stringSerde(), stringSerde()));
-        GlobalKTable<String, String> location = builder.globalTable(LOCATION_TOPIC, Consumed.with(stringSerde(), stringSerde()));
+        KStream<String, String> transactions = builder.stream(MCC_TRANSACTION_TOPIC, Consumed.with(stringSerde, stringSerde));
+        GlobalKTable<String, String> categories = builder.globalTable(MCC_CATEGORY_TOPIC, Consumed.with(stringSerde, stringSerde));
 
         transactions
-                .join(location, (clickKey, clickValue) -> clickKey, valueJoiner)
-                .to(CLICK_PLUS_LOCATION_TOPIC, Produced.with(stringSerde(), stringSerde()));
+                .join(
+                        categories,
+                        (mccKey, mccTransaction) -> mccKey,
+                        (mccTransaction, mccCategory) -> mccTransaction + " is " + mccCategory
+                )
+                .to(MCC_CATEGORISED_TOPIC, Produced.with(stringSerde, stringSerde));
     }
 }
 
