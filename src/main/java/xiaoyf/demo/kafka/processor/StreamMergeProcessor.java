@@ -68,9 +68,7 @@ public class StreamMergeProcessor {
         KStream<String, String> stream2 = builder.stream(STREAM2_TOPIC, Consumed.with(stringSerde, stringSerde));
 
         stream1
-                .peek((k,v) -> System.out.println("!!!1 " + k + ", " + v))
                 .merge(stream2)
-                .peek((k,v) -> System.out.println("!!!2 " + k + ", " + v))
                 .mapValues(v -> v + ".added")
                 .to(STREAM_MERGED_TOPIC, Produced.with(stringSerde, stringSerde));
 

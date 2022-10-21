@@ -17,9 +17,6 @@ import java.time.Duration;
 
 import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_INPUT_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_OUTPUT_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.STREAM1_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.STREAM2_TOPIC;
-import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
 
 /**
  * StreamSelfJoinProcessor
@@ -37,7 +34,7 @@ public class StreamSelfJoinProcessor {
     public void process(@Qualifier("defaultKafkaStreamsBuilder") StreamsBuilder builder) {
         log.info("StreamSelfJoinProcessor use builder:" + builder);
 
-        KStream<String, String> stream1 = builder.stream(SELF_JOIN_INPUT_TOPIC);//, Consumed.with(stringSerde, stringSerde));
+        KStream<String, String> stream1 = builder.stream(SELF_JOIN_INPUT_TOPIC, Consumed.with(stringSerde, stringSerde));
 
         stream1.join(
                     stream1,
@@ -47,6 +44,6 @@ public class StreamSelfJoinProcessor {
                         return v1 + v2;
                     },
                     JoinWindows.of(Duration.ofSeconds(5)))
-                .to(SELF_JOIN_OUTPUT_TOPIC);//, Produced.with(stringSerde, stringSerde));
+                .to(SELF_JOIN_OUTPUT_TOPIC, Produced.with(stringSerde, stringSerde));
     }
 }

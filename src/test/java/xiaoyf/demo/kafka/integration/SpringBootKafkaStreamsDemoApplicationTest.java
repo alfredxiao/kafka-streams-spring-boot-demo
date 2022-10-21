@@ -51,6 +51,9 @@ import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_OUTPUT_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM1_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM2_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_INPUT_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_LOG_APPEND_TIME_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_OUTPUT_TOPIC;
 import static xiaoyf.demo.kafka.helper.Dumper.dumpAllBeans;
 import static xiaoyf.demo.kafka.helper.Dumper.dumpTopicAndSchemaList;
 import static xiaoyf.demo.kafka.helper.Fixtures.customerDetail;
@@ -66,7 +69,8 @@ import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
                 MCC_TRANSACTION_TOPIC, MCC_CATEGORY_TOPIC, MCC_CATEGORISED_TOPIC,
                 LONG_NUMBER_TOPIC, LONG_NUMBER_DOUBLED_TOPIC,
                 STREAM1_TOPIC, STREAM2_TOPIC, STREAM_MERGED_TOPIC,
-                SELF_JOIN_INPUT_TOPIC, SELF_JOIN_OUTPUT_TOPIC
+                SELF_JOIN_INPUT_TOPIC, SELF_JOIN_OUTPUT_TOPIC,
+                TIMESTAMP_INPUT_TOPIC, TIMESTAMP_OUTPUT_TOPIC, TIMESTAMP_LOG_APPEND_TIME_TOPIC
         },
         brokerProperties = {
                 "log.dirs=./build/kafka-logs",
