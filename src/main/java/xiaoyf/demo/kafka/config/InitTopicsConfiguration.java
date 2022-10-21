@@ -11,6 +11,7 @@ import xiaoyf.demo.kafka.helper.Const;
 import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -27,9 +28,14 @@ import static xiaoyf.demo.kafka.helper.Const.MCC_TRANSACTION_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PRIMARY_APPLICATION_ID;
 import static xiaoyf.demo.kafka.helper.Const.SECONDARY_APPLICATION_ID;
+import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_INPUT_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_OUTPUT_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM1_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM2_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_INPUT_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_LOG_APPEND_TIME_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_OUTPUT_TOPIC;
 
 
 @Configuration
@@ -59,8 +65,12 @@ public class InitTopicsConfiguration {
                 STREAM1_TOPIC,
                 STREAM2_TOPIC,
                 STREAM_MERGED_TOPIC,
+                SELF_JOIN_INPUT_TOPIC,
+                SELF_JOIN_OUTPUT_TOPIC,
                 PRIMARY_APPLICATION_ID,
-                SECONDARY_APPLICATION_ID
+                SECONDARY_APPLICATION_ID,
+                TIMESTAMP_INPUT_TOPIC,
+                TIMESTAMP_OUTPUT_TOPIC
         );
 
         Set<String> existingTopics = adminClient.listTopics().names().get();
@@ -71,5 +81,9 @@ public class InitTopicsConfiguration {
                 adminClient.createTopics(Collections.singleton(newTopic)).all().get();
             }
         }
+
+        final NewTopic newTopic = new NewTopic(TIMESTAMP_LOG_APPEND_TIME_TOPIC, numPartitions, rf);
+        newTopic.configs(Map.of("message.timestamp.type", "LogAppendTime"));
+        adminClient.createTopics(Collections.singleton(newTopic)).all().get();
     }
 }

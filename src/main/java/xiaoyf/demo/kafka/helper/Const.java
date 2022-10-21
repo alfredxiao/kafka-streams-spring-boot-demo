@@ -26,6 +26,14 @@ public interface Const {
     String STREAM2_TOPIC = "stream2";
     String STREAM_MERGED_TOPIC = "stream-merged";
 
+    // self join
+    String SELF_JOIN_INPUT_TOPIC = "self-join-input";
+    String SELF_JOIN_OUTPUT_TOPIC = "self-join-output";
+
+    String TIMESTAMP_INPUT_TOPIC = "timestamp-input";
+    String TIMESTAMP_LOG_APPEND_TIME_TOPIC = "timestamp-log-append-time";
+    String TIMESTAMP_OUTPUT_TOPIC = "timestamp-output";
+
     String PRIMARY_APPLICATION_ID = "kafka-demo";
     String SECONDARY_APPLICATION_ID = "secondary-kafka-demo";
 }

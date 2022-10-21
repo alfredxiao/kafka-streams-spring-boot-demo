@@ -46,6 +46,8 @@ import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORISED_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.MCC_CATEGORY_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.MCC_TRANSACTION_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_INPUT_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_OUTPUT_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM1_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM2_TOPIC;
 import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
@@ -63,7 +65,8 @@ import static xiaoyf.demo.kafka.helper.Fixtures.premiumOrder;
                 CLICK_TOPIC, LOCATION_TOPIC, CLICK_PLUS_LOCATION_TOPIC,
                 MCC_TRANSACTION_TOPIC, MCC_CATEGORY_TOPIC, MCC_CATEGORISED_TOPIC,
                 LONG_NUMBER_TOPIC, LONG_NUMBER_DOUBLED_TOPIC,
-                STREAM1_TOPIC, STREAM2_TOPIC, STREAM_MERGED_TOPIC
+                STREAM1_TOPIC, STREAM2_TOPIC, STREAM_MERGED_TOPIC,
+                SELF_JOIN_INPUT_TOPIC, SELF_JOIN_OUTPUT_TOPIC
         },
         brokerProperties = {
                 "log.dirs=./build/kafka-logs",

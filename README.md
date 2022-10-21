@@ -9,6 +9,9 @@ This repository aims to provide some working code examples for spring boot based
 - [todo] interactive query
 - [todo] exception handling?
 - [todo] use.latest.version
+- [todo] windowed
+- [todo] joinedwindow
+- [todo] suppress window
 
 # Table-Table Join
 - both tables have to be materialised for the topology to run
