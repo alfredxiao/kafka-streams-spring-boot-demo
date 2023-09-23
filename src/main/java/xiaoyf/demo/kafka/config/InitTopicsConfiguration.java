@@ -1,5 +1,6 @@
 package xiaoyf.demo.kafka.config;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
@@ -8,7 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import xiaoyf.demo.kafka.helper.Const;
 
-import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -75,15 +75,15 @@ public class InitTopicsConfiguration {
 
         Set<String> existingTopics = adminClient.listTopics().names().get();
 
-        for (String topicName : topicNames) {
-            if (!existingTopics.contains(topicName)) {
-                final NewTopic newTopic = new NewTopic(topicName, numPartitions, rf);
-                adminClient.createTopics(Collections.singleton(newTopic)).all().get();
-            }
-        }
-
-        final NewTopic newTopic = new NewTopic(TIMESTAMP_LOG_APPEND_TIME_TOPIC, numPartitions, rf);
-        newTopic.configs(Map.of("message.timestamp.type", "LogAppendTime"));
-        adminClient.createTopics(Collections.singleton(newTopic)).all().get();
+//        for (String topicName : topicNames) {
+//            if (!existingTopics.contains(topicName)) {
+//                final NewTopic newTopic = new NewTopic(topicName, numPartitions, rf);
+//                adminClient.createTopics(Collections.singleton(newTopic)).all().get();
+//            }
+//        }
+//
+//        final NewTopic newTopic = new NewTopic(TIMESTAMP_LOG_APPEND_TIME_TOPIC, numPartitions, rf);
+//        newTopic.configs(Map.of("message.timestamp.type", "LogAppendTime"));
+//        adminClient.createTopics(Collections.singleton(newTopic)).all().get();
     }
 }

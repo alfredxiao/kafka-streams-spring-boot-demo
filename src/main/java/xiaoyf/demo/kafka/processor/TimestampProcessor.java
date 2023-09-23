@@ -25,7 +25,7 @@ import static xiaoyf.demo.kafka.helper.Const.TIMESTAMP_OUTPUT_TOPIC;
  * TimestampProcessor demonstrates that output record's timestamp is derived/copied from input topic (for this example
  * simple stream)
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class TimestampProcessor {
@@ -40,7 +40,8 @@ public class TimestampProcessor {
 
         KStream<String, String> stream1 = builder.stream(TIMESTAMP_INPUT_TOPIC, Consumed.with(stringSerde, stringSerde));
 
-        stream1.map(KeyValue::new)
-                .to(TIMESTAMP_OUTPUT_TOPIC, Produced.with(stringSerde, stringSerde));
+//        stream1.map(KeyValue::new)
+//                .join()
+//                .to(TIMESTAMP_OUTPUT_TOPIC, Produced.with(stringSerde, stringSerde));
     }
 }

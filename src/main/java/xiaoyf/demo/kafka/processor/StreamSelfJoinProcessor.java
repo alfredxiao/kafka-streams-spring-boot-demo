@@ -21,7 +21,7 @@ import static xiaoyf.demo.kafka.helper.Const.SELF_JOIN_OUTPUT_TOPIC;
 /**
  * StreamSelfJoinProcessor
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class StreamSelfJoinProcessor {

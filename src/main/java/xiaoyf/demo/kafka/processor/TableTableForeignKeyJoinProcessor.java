@@ -30,7 +30,7 @@ import static xiaoyf.demo.kafka.helper.Const.PREMIUM_ORDER_TOPIC;
  * topic is 'customer'. We extract a customer identity from 'order' and then join with 'customer' to enhance the order
  * message, add filtering, end up having a 'premium-order' as result topic.
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class TableTableForeignKeyJoinProcessor {

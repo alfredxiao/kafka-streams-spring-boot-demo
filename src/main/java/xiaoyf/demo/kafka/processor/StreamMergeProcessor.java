@@ -20,7 +20,7 @@ import static xiaoyf.demo.kafka.helper.Const.STREAM_MERGED_TOPIC;
  * StreamMergeProcessor demonstrates a stream merging can be done via different approaches. Although their functionalities
  * are the same, their topologies are different.
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class StreamMergeProcessor {

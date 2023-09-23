@@ -21,7 +21,7 @@ import static xiaoyf.demo.kafka.helper.Const.MCC_TRANSACTION_TOPIC;
 /**
  * StreamGlobalKTableJoinProcessor demonstrates a stream-globalktable join.
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class StreamGlobalKTableJoinProcessor {

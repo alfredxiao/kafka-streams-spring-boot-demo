@@ -21,7 +21,7 @@ import static xiaoyf.demo.kafka.helper.Const.LOCATION_TOPIC;
 /**
  * StreamTableJoinProcessor demonstrates a stream-table join
  */
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class StreamTableJoinProcessor {
