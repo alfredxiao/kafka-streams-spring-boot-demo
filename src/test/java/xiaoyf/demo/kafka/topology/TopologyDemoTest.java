@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static xiaoyf.demo.kafka.helper.Const.PRIMARY_APPLICATION_ID;
-import static xiaoyf.demo.kafka.helper.Dumper.dumpTestDriverStats;
-import static xiaoyf.demo.kafka.helper.Dumper.dumpTopology;
+import static xiaoyf.demo.kafka.helper.debug.Dumper.dumpTestDriverStats;
+import static xiaoyf.demo.kafka.helper.debug.Dumper.dumpTopology;
 
 /**
  * TopologyTest demonstrates unit testing topologies with tables in it.

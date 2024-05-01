@@ -1,20 +1,19 @@
 package xiaoyf.demo.kafka.filter;
 
-import demo.model.CustomerOrder;
-import demo.model.CustomerOrderKey;
+import demo.model.OrderKey;
+import demo.model.OrderValue;
 import org.apache.kafka.streams.kstream.Predicate;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Component
-public class BigPurchaseFilter implements Predicate<CustomerOrderKey, CustomerOrder> {
-    private static final BigDecimal BIG_PURCHASE_THRESHOLD = new BigDecimal("1000.00");
+public class BigPurchaseFilter implements Predicate<OrderKey, OrderValue> {
+    private static final long BIG_PURCHASE_THRESHOLD = 1000L;
 
     @Override
-    public boolean test(CustomerOrderKey key, CustomerOrder value) {
+    public boolean test(OrderKey key, OrderValue value) {
         return Objects.nonNull(value.getCampaign())
-                && value.getAmount().compareTo(BIG_PURCHASE_THRESHOLD) >= 0;
+                && value.getQuantity() > BIG_PURCHASE_THRESHOLD;
     }
 }

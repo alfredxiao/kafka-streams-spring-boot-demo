@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.helper;
+package xiaoyf.demo.kafka.helper.debug;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.Topology;

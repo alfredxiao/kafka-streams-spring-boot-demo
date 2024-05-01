@@ -1,10 +1,10 @@
 {
   "type": "record",
-  "name": "CustomerOrderKey",
+  "name": "CustomerKey",
   "namespace": "demo.model",
   "fields": [
     {
-      "name" : "orderNumber",
+      "name" : "customerNumber",
       "type" : "long"
     }
   ]

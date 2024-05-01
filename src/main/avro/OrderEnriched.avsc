@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "OrderEnriched",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "orderNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "customerNumber",
+      "type" : ["null", "long"]
+    },
+    {
+      "name" : "customer",
+      "type" : ["null", "CustomerValue"]
+    },
+    {
+      "name" : "productName",
+      "type" : "string"
+    },
+    {
+      "name": "quantity",
+      "type" : "long",
+      "default": 1
+    },
+    {
+      "name" : "campaign",
+      "type" : ["null", "string"],
+      "default": null
+    }
+  ]
+}

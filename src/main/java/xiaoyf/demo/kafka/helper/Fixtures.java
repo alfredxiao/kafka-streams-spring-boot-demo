@@ -1,9 +1,9 @@
 package xiaoyf.demo.kafka.helper;
 
-import demo.model.CustomerDetails;
-import demo.model.CustomerDetailsKey;
-import demo.model.CustomerOrder;
-import demo.model.CustomerOrderKey;
+import demo.model.CustomerValue;
+import demo.model.CustomerKey;
+import demo.model.OrderValue;
+import demo.model.OrderKey;
 import demo.model.PremiumOrder;
 import demo.model.PremiumOrderKey;
 import org.apache.kafka.streams.KeyValue;
@@ -14,39 +14,39 @@ import java.util.List;
 
 public class Fixtures {
 
-    public static TestRecord<CustomerOrderKey, CustomerOrder> customerOrder(
+    public static TestRecord<OrderKey, OrderValue> orderValue(
             long orderNum,
             long custNum,
             String prodName,
-            BigDecimal amount,
+            long quantity,
             String campaign
     ) {
-        var key = CustomerOrderKey.newBuilder()
+        var key = OrderKey.newBuilder()
                 .setOrderNumber(orderNum)
                 .build();
 
-        var value = CustomerOrder.newBuilder()
+        var value = OrderValue.newBuilder()
                 .setOrderNumber(orderNum)
                 .setCustomerNumber(custNum)
                 .setProductName(prodName)
-                .setAmount(amount)
+                .setQuantity(quantity)
                 .setCampaign(campaign)
                 .build();
 
         return new TestRecord<>(key, value);
     }
 
-    public static TestRecord<CustomerDetailsKey, CustomerDetails> customerDetail(
+    public static TestRecord<CustomerKey, CustomerValue> customerValue(
             long custNum,
             String name,
             String email,
             String ...campaigns
     ) {
-        var key = CustomerDetailsKey.newBuilder()
+        var key = CustomerKey.newBuilder()
                 .setCustomerNumber(custNum)
                 .build();
 
-        var value = CustomerDetails.newBuilder()
+        var value = CustomerValue.newBuilder()
                 .setCustomerNumber(custNum)
                 .setName(name)
                 .setEmail(email)

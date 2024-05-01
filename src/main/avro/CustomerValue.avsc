@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "CustomerDetails",
+  "name": "CustomerValue",
   "namespace": "demo.model",
   "fields": [
     {

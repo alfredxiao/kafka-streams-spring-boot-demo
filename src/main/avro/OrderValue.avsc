@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "name": "CustomerOrder",
+  "name": "OrderValue",
   "namespace": "demo.model",
   "fields": [
     {
@@ -9,20 +9,16 @@
     },
     {
       "name" : "customerNumber",
-      "type" : "long"
+      "type" : ["null", "long"]
     },
     {
       "name" : "productName",
       "type" : "string"
     },
     {
-      "name": "amount",
-      "type" : {
-        "type": "bytes",
-        "logicalType": "decimal",
-        "precision": 8,
-        "scale": 2
-      }
+      "name": "quantity",
+      "type" : "long",
+      "default": 1
     },
     {
       "name" : "campaign",

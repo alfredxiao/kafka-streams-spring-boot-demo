@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.helper;
+package xiaoyf.demo.kafka.helper.data;
 
 
 import org.apache.kafka.clients.producer.KafkaProducer;

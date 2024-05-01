@@ -1,10 +1,10 @@
 package xiaoyf.demo.kafka.processor;
 
 
-import demo.model.CustomerDetails;
-import demo.model.CustomerDetailsKey;
-import demo.model.CustomerOrder;
-import demo.model.CustomerOrderKey;
+import demo.model.CustomerValue;
+import demo.model.CustomerKey;
+import demo.model.OrderValue;
+import demo.model.OrderKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -45,24 +45,24 @@ public class TableTableForeignKeyJoinProcessor {
     public void process(@Qualifier("defaultKafkaStreamsBuilder") StreamsBuilder builder) {
         log.info("TableTableForeignKeyJoinProcessor use builder:" + builder);
 
-        KTable<CustomerDetailsKey, CustomerDetails> customerDetails =
+        KTable<CustomerKey, CustomerValue> CustomerValue =
                 builder.table(CUSTOMER_DETAIL_TOPIC, Consumed.as("CUST-DETAILS-TABLE"), Materialized.as("CUST-DETAIL-TABLE-STORE"));
 
-        KStream<CustomerOrderKey, CustomerOrder> orderStream = builder.stream(CUSTOMER_ORDER_TOPIC, Consumed.as("CUSTOMER-ORDER-STREAM"));
+        KStream<OrderKey, OrderValue> orderStream = builder.stream(CUSTOMER_ORDER_TOPIC, Consumed.as("CUSTOMER-ORDER-STREAM"));
 
         orderStream
                 .filter(bigPurchase, Named.as("FILTER-BIG-PURCHASE"))
                 .toTable(Named.as("CUST-ORDER-TABLE"), Materialized.as("CUST-ORDER-TABLE-STORE"))
-                .join(customerDetails, this::extractCustomerKey, valueJoiner, Named.as("ORDER-JOINS-CUST-DETAIL"), Materialized.as("ORDER-JOINS-CUST-DETAIL-STORE"))
+                .join(CustomerValue, this::extractCustomerKey, valueJoiner, Named.as("ORDER-JOINS-CUST-DETAIL"), Materialized.as("ORDER-JOINS-CUST-DETAIL-STORE"))
                 .toStream(Named.as("TO-JOINED-ORDER"))
                 .filter((key, value) -> value != null, Named.as("FILTER-ONLY-MATCHED"))
                 .selectKey(keyMapper, Named.as("SELECT-PREMIUM-ORDER-KEY"))
                 .to(PREMIUM_ORDER_TOPIC, Produced.as("TO-PREMIUM-ORDER"));
     }
 
-    private CustomerDetailsKey extractCustomerKey(final CustomerOrder customerOrder) {
-        return CustomerDetailsKey.newBuilder()
-                .setCustomerNumber(customerOrder.getCustomerNumber())
+    private CustomerKey extractCustomerKey(final OrderValue OrderValue) {
+        return CustomerKey.newBuilder()
+                .setCustomerNumber(OrderValue.getCustomerNumber())
                 .build();
     }
 }

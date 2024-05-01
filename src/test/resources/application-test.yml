@@ -5,12 +5,7 @@ spring:
     bootstrap-servers: ${spring.embedded.kafka.brokers}
     properties:
       schema.registry.url: mock://dummy
-      basic.auth.credentials.source: dummy
-      basic.auth.user.info: dummy
       specific.avro.reader: true
-      spring.deserializer:
-        key.delegate.class: xiaoyf.demo.kafka.helper.serde.MockDeserializer
-        value.delegate.class: xiaoyf.demo.kafka.helper.serde.MockDeserializer
     streams:
       application-id: kafka-demo
       properties:
@@ -19,18 +14,12 @@ spring:
         processing.guarantee: exactly_once
         num.stream.threads: 1
         commit.interval.ms: 1
-        default.key.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
-        default.value.serde: xiaoyf.demo.kafka.helper.serde.MockSerde
+        default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
     producer:
-      key-serializer: xiaoyf.demo.kafka.helper.serde.MockSerializer
-      value-serializer: xiaoyf.demo.kafka.helper.serde.MockSerializer
-    consumer:
-      group-id: test-group
-#      enable.auto.commit: false
-      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-      auto-offset-reset: earliest
-    listener:
-      ack-mode: MANUAL_IMMEDIATE
+      key-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        linger.ms: 0
 
 init-create-topics: false

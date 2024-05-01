@@ -1,12 +1,13 @@
 package xiaoyf.demo.kafka.joiner;
 
-import demo.model.CustomerDetails;
-import demo.model.CustomerOrder;
+import demo.model.CustomerValue;
+import demo.model.OrderValue;
 import demo.model.PremiumOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
@@ -15,31 +16,31 @@ import java.util.Objects;
  */
 @Component
 @Slf4j
-public class PremiumOrderValueJoiner implements ValueJoiner<CustomerOrder, CustomerDetails, PremiumOrder> {
+public class PremiumOrderValueJoiner implements ValueJoiner<OrderValue, CustomerValue, PremiumOrder> {
 
     @Override
-    public PremiumOrder apply(CustomerOrder customerOrder, CustomerDetails customerDetails) {
-        log.info("PremiumOrderValueJoiner joining...{}, {}", customerOrder, customerDetails);
-        var activeCampaigns = customerDetails.getActiveCampaigns();
+    public PremiumOrder apply(OrderValue OrderValue, CustomerValue CustomerValue) {
+        log.info("PremiumOrderValueJoiner joining...{}, {}", OrderValue, CustomerValue);
+        var activeCampaigns = CustomerValue.getActiveCampaigns();
 
         if (Objects.isNull(activeCampaigns)) {
             log.info("customer joins no campaigns, ignore order");
             return null;
         }
 
-        if (!activeCampaigns.contains(customerOrder.getCampaign())) {
+        if (!activeCampaigns.contains(OrderValue.getCampaign())) {
             log.info("order not matching customer's campaigns, ignore order");
             return null;
         }
 
         return PremiumOrder.newBuilder()
-                .setAmount(customerOrder.getAmount())
-                .setCustomerNumber(customerOrder.getCustomerNumber())
-                .setProductName(customerOrder.getProductName())
-                .setOrderNumber(customerOrder.getOrderNumber())
-                .setCampaign(customerOrder.getCampaign())
-                .setName(customerDetails.getName())
-                .setEmail(customerDetails.getEmail())
+                .setAmount(BigDecimal.valueOf(OrderValue.getQuantity()))
+                .setCustomerNumber(OrderValue.getCustomerNumber())
+                .setProductName(OrderValue.getProductName())
+                .setOrderNumber(OrderValue.getOrderNumber())
+                .setCampaign(OrderValue.getCampaign())
+                .setName(CustomerValue.getName())
+                .setEmail(CustomerValue.getEmail())
                 .build();
     }
 }
