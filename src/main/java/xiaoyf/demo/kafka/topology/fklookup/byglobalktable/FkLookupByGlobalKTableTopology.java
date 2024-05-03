@@ -12,9 +12,9 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
+import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 
 /*
   GlobalKTable uses its input topic as changelog, so it's better to be set as compacted topic.
@@ -23,17 +23,14 @@ import xiaoyf.demo.kafka.config.DemoProperties;
 @RequiredArgsConstructor
 @Slf4j
 public class FkLookupByGlobalKTableTopology {
+    private final PropertiesLogHelper logHelper;
     private final DemoProperties properties;
     private final OrderCustomerJoiner orderCustomerJoiner;
     private final CustomerNumberExtractor customerNumberExtractor;
 
-    @Autowired(required = false)
-    private GitProperties gitProperties;
-
     @Autowired
     void process(@Qualifier("fkLookupByGlobalKTableStreamsBuilder") StreamsBuilder builder) {
-        log.info("FkLookupByGlobalKTableTopology Processor Config {}", properties);
-        log.info("git commit: {}", gitProperties == null ? "NULL" : gitProperties.getShortCommitId());
+        logHelper.logProperties(log);
 
         GlobalKTable<CustomerKey, CustomerValue> customerTable =
                 builder.globalTable(properties.getCustomerTopic(), Materialized.as("customer-table"));

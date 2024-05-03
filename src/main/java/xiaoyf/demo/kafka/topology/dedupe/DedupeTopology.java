@@ -1,7 +1,7 @@
 package xiaoyf.demo.kafka.topology.dedupe;
 
-import demo.model.OrderValue;
 import demo.model.OrderKey;
+import demo.model.OrderValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -10,9 +10,9 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
+import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 
 import static xiaoyf.demo.kafka.topology.dedupe.StoreBasedDedupeProcessor.ORDER_STORE;
 
@@ -20,16 +20,13 @@ import static xiaoyf.demo.kafka.topology.dedupe.StoreBasedDedupeProcessor.ORDER_
 @RequiredArgsConstructor
 @Slf4j
 public class DedupeTopology {
+    private final PropertiesLogHelper logHelper;
     private final DemoProperties properties;
     private final StoreBuilder<KeyValueStore<OrderKey, OrderValue>> orderStoreBuilder;
 
-    @Autowired(required = false)
-    private GitProperties gitProperties;
-
     @Autowired
     void process(@Qualifier("dedupeStreamsBuilder") StreamsBuilder builder) {
-        log.info("DedupeTopology Processor Config {}", properties);
-        log.info("git commit: {}", gitProperties == null ? "NULL" : gitProperties.getShortCommitId());
+        logHelper.logProperties(log);
 
         builder.addStateStore(orderStoreBuilder);
 
@@ -41,5 +38,3 @@ public class DedupeTopology {
                 .to(properties.getOrderDedupedTopic());
     }
 }
-
-// todo: persistent and in memory

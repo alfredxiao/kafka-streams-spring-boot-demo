@@ -18,6 +18,7 @@ import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.commons.processor.GlobalStateStoreLoadingProcessor;
 import xiaoyf.demo.kafka.config.DemoProperties;
+import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 
 import static xiaoyf.demo.kafka.topology.fklookup.byglobalstore.FkLookupProcessor.CUSTOMER_STORE;
 
@@ -28,18 +29,15 @@ import static xiaoyf.demo.kafka.topology.fklookup.byglobalstore.FkLookupProcesso
 @RequiredArgsConstructor
 @Slf4j
 public class FkLookupByGlobalStoreTopology {
+    private final PropertiesLogHelper logHelper;
     private final DemoProperties properties;
     private final StoreBuilder<KeyValueStore<CustomerKey, CustomerValue>> customerStoreBuilder;
     private final Serde<CustomerKey> keySerde;
     private final Serde<CustomerValue> valueSerde;
 
-    @Autowired(required = false)
-    private GitProperties gitProperties;
-
     @Autowired
     void process(@Qualifier("fkLookupByGlobalStoreStreamsBuilder") StreamsBuilder builder) {
-        log.info("FkLookupByGlobalStoreTopology Processor Config {}", properties);
-        log.info("git commit: {}", gitProperties == null ? "NULL" : gitProperties.getShortCommitId());
+        logHelper.logProperties(log);
 
         builder.addGlobalStore(customerStoreBuilder,
                 properties.getCustomerTopic(),

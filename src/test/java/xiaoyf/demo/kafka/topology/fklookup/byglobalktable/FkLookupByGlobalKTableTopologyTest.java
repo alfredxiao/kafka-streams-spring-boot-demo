@@ -23,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.config.SharedTopologyConfiguration;
+import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 import xiaoyf.demo.kafka.helper.testhelper.TopologyTestHelper;
 
 import java.util.List;
