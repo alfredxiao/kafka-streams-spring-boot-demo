@@ -12,9 +12,12 @@ public class DemoProperties {
     private String dedupeAppId;
     private String fkLookupByGlobalStoreAppId;
     private String fkLookupByGlobalKTableAppId;
+    private String fkLookupByRegularStoreAppId;
 
     private String orderTopic;
     private String orderDedupedTopic;
     private String customerTopic;
-    private String orderEnrichedTopic;
+    private String orderEnrichedByGlobalStoreTopic;
+    private String orderEnrichedByGlobalKTableTopic;
+    private String orderEnrichedByRegularStoreTopic;
 }

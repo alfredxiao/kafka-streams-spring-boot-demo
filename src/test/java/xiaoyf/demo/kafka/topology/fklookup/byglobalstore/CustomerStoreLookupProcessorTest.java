@@ -18,7 +18,7 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
 import static xiaoyf.demo.kafka.topology.fklookup.byglobalstore.FkLookupProcessor.CUSTOMER_STORE;
 
-public class FkLookupProcessorTest {
+public class CustomerStoreLookupProcessorTest {
 
     private FkLookupProcessor processor;
     private ProcessorTestHelper<OrderKey, OrderValue, CustomerKey, CustomerValue, OrderKey, OrderEnriched> helper;

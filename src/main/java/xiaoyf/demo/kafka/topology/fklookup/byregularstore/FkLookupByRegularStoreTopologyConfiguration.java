@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalstore;
+package xiaoyf.demo.kafka.topology.fklookup.byregularstore;
 
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
@@ -14,14 +14,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @RequiredArgsConstructor
 @Slf4j
-public class FkLookupByGlobalStoreTopologyConfiguration {
+public class FkLookupByRegularStoreTopologyConfiguration {
 
-    @Bean("customerStoreBuilder")
-    public StoreBuilder<KeyValueStore<CustomerKey, CustomerValue>> customerStoreBuilder(
+    @Bean("regularCustomerStoreBuilder")
+    public StoreBuilder<KeyValueStore<CustomerKey, CustomerValue>> regularCustomerStoreBuilder(
             Serde<CustomerKey> keySerde,
             Serde<CustomerValue> valueSerde) {
         return Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore(FkLookupProcessor.CUSTOMER_STORE),
+                Stores.inMemoryKeyValueStore(CustomerStoreProcessor.CUSTOMER_STORE),
                 keySerde,
                 valueSerde);
     }

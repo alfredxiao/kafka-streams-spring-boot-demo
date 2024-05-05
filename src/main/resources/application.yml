@@ -26,7 +26,11 @@ demo-streams:
   mapping-app-id: map-app
   dedupe-app-id: dedupe-app
   fk-lookup-by-global-store-app-id: fk-lookup-by-global-store-app
+  fk-lookup-by-global-ktable-app-id: fk-lookup-by-global-ktable-app
+  fk-lookup-by-regular-store-app-id: fk-lookup-by-regular-store-app
   order-topic: order
   customer-topic: customer
   order-deduped-topic: order-deduped
-  order-enriched-topic: order-enriched
+  order-enriched-by-global-store-topic: order-enriched-by-global-store
+  order-enriched-by-global-ktable-topic: order-enriched-by-global-ktable
+  order-enriched-by-regular-store-topic: order-enriched-by-regular-store

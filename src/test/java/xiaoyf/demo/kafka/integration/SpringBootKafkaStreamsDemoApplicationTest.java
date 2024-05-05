@@ -41,7 +41,8 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
                 SpringBootKafkaStreamsDemoApplicationTest.ORDER_TOPIC,
                 SpringBootKafkaStreamsDemoApplicationTest.CUSTOMER_TOPIC,
                 SpringBootKafkaStreamsDemoApplicationTest.ORDER_DEDUPED_TOPIC,
-                SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_TOPIC,
+                SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_BY_GLOBAL_STORE_TOPIC,
+                SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_BY_GLOBAL_KTABLE_TOPIC,
         },
         brokerProperties = {
                 "log.dirs=./build/kafka-logs",
@@ -57,7 +58,9 @@ class SpringBootKafkaStreamsDemoApplicationTest {
     public static final String ORDER_TOPIC = "order";
     public static final String ORDER_DEDUPED_TOPIC = "order-deduped";
     public static final String CUSTOMER_TOPIC = "customer";
-    public static final String ORDER_ENRICHED_TOPIC = "order-enriched";
+    public static final String ORDER_ENRICHED_BY_GLOBAL_STORE_TOPIC = "order-enriched-by-global-store";
+    public static final String ORDER_ENRICHED_BY_GLOBAL_KTABLE_TOPIC = "order-enriched-by-global-ktable";
+    public static final String ORDER_ENRICHED_BY_REGULAR_STORE_TOPIC = "order-enriched-by-regular-store";
     private static final Duration MAX_WAIT_IN_TEST_CONSUMER = Duration.ofSeconds(15);
     private static final Duration MIN_WAIT_IN_TEST_CONSUMER = Duration.ofSeconds(3);
     private static final String AVRO_DESERIALIZER_CLASS_NAME = SpecificAvroDeserializer.class.getName();
@@ -82,15 +85,16 @@ class SpringBootKafkaStreamsDemoApplicationTest {
 
     @AfterAll
     static void cleanup() throws Exception {
-        FileSystemUtils.deleteRecursively(Path.of("./build/tmp/state-dir"));
+        //FileSystemUtils.deleteRecursively(Path.of("./build/tmp/state-dir"));
     }
 
     @Test
     void shouldDedupe() throws Exception {
+        final Long orderNumber = 101L;
         kafkaTemplate.send(
                 ORDER_TOPIC,
-                testOrderKey(),
-                testOrderValue()
+                testOrderKey(orderNumber),
+                testOrderValue(orderNumber)
         ).get();
 
         TestConsumer<OrderKey, OrderValue> testConsumer = new TestConsumer<OrderKey, OrderValue>(
@@ -104,20 +108,22 @@ class SpringBootKafkaStreamsDemoApplicationTest {
                 .untilAsserted(() -> {
                     List<ConsumerRecord<OrderKey, OrderValue>> received = testConsumer.getReceivedRecords();
                     assertThat(received).hasSize(1);
+                    assertThat(received.get(0).key().getOrderNumber()).isEqualTo(orderNumber);
                 });
     }
 
     @Test
     void shouldLookupCustomerViaGlobalStore() throws Exception {
+        final Long orderNumber = 102L;
         kafkaTemplate.send(
                 ORDER_TOPIC,
-                testOrderKey(),
-                testOrderValue()
+                testOrderKey(orderNumber),
+                testOrderValue(orderNumber)
         ).get();
 
         TestConsumer<OrderKey, OrderEnriched> testConsumer = new TestConsumer<OrderKey, OrderEnriched>(
                 getBrokerPort(),
-                ORDER_ENRICHED_TOPIC,
+                ORDER_ENRICHED_BY_GLOBAL_STORE_TOPIC,
                 AVRO_DESERIALIZER_CLASS_NAME,
                 AVRO_DESERIALIZER_CLASS_NAME)
                 .startListening(MIN_WAIT_IN_TEST_CONSUMER, MAX_WAIT_IN_TEST_CONSUMER, 1);
@@ -126,6 +132,55 @@ class SpringBootKafkaStreamsDemoApplicationTest {
                 .untilAsserted(() -> {
                     List<ConsumerRecord<OrderKey, OrderEnriched>> received = testConsumer.getReceivedRecords();
                     assertThat(received).hasSize(1);
+                    assertThat(received.get(0).key().getOrderNumber()).isEqualTo(orderNumber);
+                });
+    }
+
+    @Test
+    void shouldLookupCustomerViaGlobalKTable() throws Exception {
+        final Long orderNumber = 103L;
+        kafkaTemplate.send(
+                ORDER_TOPIC,
+                testOrderKey(orderNumber),
+                testOrderValue(orderNumber)
+        ).get();
+
+        TestConsumer<OrderKey, OrderEnriched> testConsumer = new TestConsumer<OrderKey, OrderEnriched>(
+                getBrokerPort(),
+                ORDER_ENRICHED_BY_GLOBAL_KTABLE_TOPIC,
+                AVRO_DESERIALIZER_CLASS_NAME,
+                AVRO_DESERIALIZER_CLASS_NAME)
+                .startListening(MIN_WAIT_IN_TEST_CONSUMER, MAX_WAIT_IN_TEST_CONSUMER, 1);
+
+        await().atMost(MAX_WAIT_IN_TEST_CONSUMER)
+                .untilAsserted(() -> {
+                    List<ConsumerRecord<OrderKey, OrderEnriched>> received = testConsumer.getReceivedRecords();
+                    assertThat(received).hasSize(1);
+                    assertThat(received.get(0).key().getOrderNumber()).isEqualTo(orderNumber);
+                });
+    }
+
+    @Test
+    void shouldLookupCustomerViaRegularStore() throws Exception {
+        final Long orderNumber = 104L;
+        kafkaTemplate.send(
+                ORDER_TOPIC,
+                testOrderKey(orderNumber),
+                testOrderValue(orderNumber)
+        ).get();
+
+        TestConsumer<OrderKey, OrderEnriched> testConsumer = new TestConsumer<OrderKey, OrderEnriched>(
+                getBrokerPort(),
+                ORDER_ENRICHED_BY_REGULAR_STORE_TOPIC,
+                AVRO_DESERIALIZER_CLASS_NAME,
+                AVRO_DESERIALIZER_CLASS_NAME)
+                .startListening(MIN_WAIT_IN_TEST_CONSUMER, MAX_WAIT_IN_TEST_CONSUMER, 1);
+
+        await().atMost(MAX_WAIT_IN_TEST_CONSUMER)
+                .untilAsserted(() -> {
+                    List<ConsumerRecord<OrderKey, OrderEnriched>> received = testConsumer.getReceivedRecords();
+                    assertThat(received).hasSize(1);
+                    assertThat(received.get(0).key().getOrderNumber()).isEqualTo(orderNumber);
                 });
     }
 

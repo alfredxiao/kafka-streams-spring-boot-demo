@@ -94,7 +94,7 @@ public class FkLookupByGlobalKTableTopologyTest {
     }
 
     @Test
-    void shouldIgnoreWhenExtractedCustomerNumberIsNull() {
+    void shouldIgnoreOrderWhenCustomerNumberNotFound() {
         customerTopic.pipeInput(
                 testCustomerKey(),
                 testCustomerValue()
@@ -125,7 +125,7 @@ public class FkLookupByGlobalKTableTopologyTest {
             properties.setFkLookupByGlobalKTableAppId("fklookup-by-global-ktable-topology-test");
             properties.setOrderTopic(ORDER_TOPIC);
             properties.setCustomerTopic(CUSTOMER_TOPIC);
-            properties.setOrderEnrichedTopic(ORDER_ENRICHED_TOPIC);
+            properties.setOrderEnrichedByGlobalKTableTopic(ORDER_ENRICHED_TOPIC);
 
             return properties;
         }

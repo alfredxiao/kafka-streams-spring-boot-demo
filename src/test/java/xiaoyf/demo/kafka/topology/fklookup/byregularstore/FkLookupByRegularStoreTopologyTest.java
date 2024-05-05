@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalstore;
+package xiaoyf.demo.kafka.topology.fklookup.byregularstore;
 
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
@@ -37,19 +37,19 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
 @ContextConfiguration(
     classes = {
         SharedTopologyConfiguration.class,
-        FkLookupByGlobalStoreTopologyTest.TestConfig.class,
-        FkLookupByGlobalStoreTopology.class,
-        FkLookupByGlobalStoreTopologyConfiguration.class,
+        FkLookupByRegularStoreTopologyTest.TestConfig.class,
+        FkLookupByRegularStoreTopology.class,
+        FkLookupByRegularStoreTopologyConfiguration.class,
     }
 )
-public class FkLookupByGlobalStoreTopologyTest {
+public class FkLookupByRegularStoreTopologyTest {
     final static String ORDER_TOPIC = "order";
     final static String CUSTOMER_TOPIC = "customer";
     final static String ORDER_ENRICHED_TOPIC = "order-enriched";
 
     @Autowired
-    @Qualifier("fkLookupByGlobalStoreStreamsBuilder")
-    private StreamsBuilder fkLookupByGlobalStoreStreamsBuilder;
+    @Qualifier("fkLookupByRegularStoreStreamsBuilder")
+    private StreamsBuilder fkLookupByRegularStoreStreamsBuilder;
 
     private TestInputTopic<OrderKey, OrderValue> orderTopic;
     private TestInputTopic<CustomerKey, CustomerValue> customerTopic;
@@ -58,7 +58,7 @@ public class FkLookupByGlobalStoreTopologyTest {
 
     @BeforeEach
     void setup() {
-        helper = new TopologyTestHelper(fkLookupByGlobalStoreStreamsBuilder);
+        helper = new TopologyTestHelper(fkLookupByRegularStoreStreamsBuilder);
 
         orderTopic = helper.inputTopic(ORDER_TOPIC);
         customerTopic = helper.inputTopic(CUSTOMER_TOPIC);
@@ -112,8 +112,8 @@ public class FkLookupByGlobalStoreTopologyTest {
 
     @TestConfiguration
     static class TestConfig {
-        @Bean("fkLookupByGlobalStoreStreamsBuilder")
-        StreamsBuilder fkLookupByGlobalStoreStreamsBuilder() {
+        @Bean("fkLookupByRegularStoreStreamsBuilder")
+        StreamsBuilder fkLookupByRegularStoreStreamsBuilder() {
             return new StreamsBuilder();
         }
 
@@ -121,10 +121,10 @@ public class FkLookupByGlobalStoreTopologyTest {
         DemoProperties demoProperties() {
             DemoProperties properties = new DemoProperties();
 
-            properties.setFkLookupByGlobalStoreAppId("fklookup-by-global-store-topology-test");
+            properties.setFkLookupByRegularStoreAppId("fklookup-by-regular-store-topology-test");
             properties.setOrderTopic(ORDER_TOPIC);
             properties.setCustomerTopic(CUSTOMER_TOPIC);
-            properties.setOrderEnrichedByGlobalStoreTopic(ORDER_ENRICHED_TOPIC);
+            properties.setOrderEnrichedByRegularStoreTopic(ORDER_ENRICHED_TOPIC);
 
             return properties;
         }

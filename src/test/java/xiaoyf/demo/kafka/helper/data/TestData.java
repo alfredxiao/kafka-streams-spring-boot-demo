@@ -14,14 +14,22 @@ public class TestData {
     public static final String CUSTOMER_EMAIL = "ax@email.com";
 
     public static OrderKey testOrderKey() {
+        return testOrderKey(ORDER_NUMBER);
+    }
+
+    public static OrderKey testOrderKey(final Long orderNumber) {
         return OrderKey.newBuilder()
-                .setOrderNumber(100)
+                .setOrderNumber(orderNumber)
                 .build();
     }
 
     public static OrderValue testOrderValue() {
+        return testOrderValue(ORDER_NUMBER);
+    }
+
+    public static OrderValue testOrderValue(final Long orderNumber) {
         return OrderValue.newBuilder()
-                .setOrderNumber(ORDER_NUMBER)
+                .setOrderNumber(orderNumber)
                 .setQuantity(11L)
                 .setCampaign("camp1")
                 .setCustomerNumber(CUSTOMER_NUMBER)

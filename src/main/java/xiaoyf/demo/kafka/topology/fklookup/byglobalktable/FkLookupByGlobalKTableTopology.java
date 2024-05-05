@@ -42,6 +42,6 @@ public class FkLookupByGlobalKTableTopology {
                         orderCustomerJoiner,
                         Named.as("order-joins-customer")
                 )
-                .to(properties.getOrderEnrichedTopic());
+                .to(properties.getOrderEnrichedByGlobalKTableTopic());
     }
 }
