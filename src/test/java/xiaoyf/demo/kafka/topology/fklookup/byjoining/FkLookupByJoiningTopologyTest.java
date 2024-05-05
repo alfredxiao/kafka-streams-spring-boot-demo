@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalktable;
+package xiaoyf.demo.kafka.topology.fklookup.byjoining;
 
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
@@ -40,20 +40,20 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
 @ContextConfiguration(
     classes = {
         SharedTopologyConfiguration.class,
-        FkLookupByGlobalKTableTopologyTest.TestConfig.class,
-        FkLookupByGlobalKTableTopology.class,
+        FkLookupByJoiningTopologyTest.TestConfig.class,
+        FkLookupByJoiningTopology.class,
         OrderCustomerJoiner.class,
         CustomerNumberExtractor.class,
     }
 )
-public class FkLookupByGlobalKTableTopologyTest {
+public class FkLookupByJoiningTopologyTest {
     final static String ORDER_TOPIC = "order";
     final static String CUSTOMER_TOPIC = "customer";
     final static String ORDER_ENRICHED_TOPIC = "order-enriched";
 
     @Autowired
-    @Qualifier("fkLookupByGlobalKTableStreamsBuilder")
-    private StreamsBuilder fkLookupByGlobalKTableStreamsBuilder;
+    @Qualifier("fkLookupByJoiningStreamsBuilder")
+    private StreamsBuilder fkLookupByJoiningStreamsBuilder;
 
     private TestInputTopic<OrderKey, OrderValue> orderTopic;
     private TestInputTopic<CustomerKey, CustomerValue> customerTopic;
@@ -62,7 +62,7 @@ public class FkLookupByGlobalKTableTopologyTest {
 
     @BeforeEach
     void setup() {
-        helper = new TopologyTestHelper(fkLookupByGlobalKTableStreamsBuilder);
+        helper = new TopologyTestHelper(fkLookupByJoiningStreamsBuilder);
 
         orderTopic = helper.inputTopic(ORDER_TOPIC);
         customerTopic = helper.inputTopic(CUSTOMER_TOPIC);
@@ -94,28 +94,10 @@ public class FkLookupByGlobalKTableTopologyTest {
         assertThat(ordersEnriched.get(0).value.getCustomer().getName()).isEqualTo(CUSTOMER_NAME);
     }
 
-    @Test
-    void shouldIgnoreOrderWhenCustomerNumberNotFound() {
-        customerTopic.pipeInput(
-                testCustomerKey(),
-                testCustomerValue()
-        );
-
-        final OrderValue orderValue = testOrderValue();
-        orderValue.setCustomerNumber(null);
-        orderTopic.pipeInput(
-                testOrderKey(),
-                orderValue
-        );
-
-        final List<KeyValue<OrderKey, OrderEnriched>> ordersEnriched = orderEnrichedTopic.readKeyValuesToList();
-        assertThat(ordersEnriched).hasSize(0);
-    }
-
     @TestConfiguration
     static class TestConfig {
-        @Bean("fkLookupByGlobalKTableStreamsBuilder")
-        StreamsBuilder fkLookupByGlobalKTableStreamsBuilder() {
+        @Bean("fkLookupByJoiningStreamsBuilder")
+        StreamsBuilder fkLookupByJoiningStreamsBuilder() {
             return new StreamsBuilder();
         }
 
@@ -123,10 +105,10 @@ public class FkLookupByGlobalKTableTopologyTest {
         DemoProperties demoProperties() {
             DemoProperties properties = new DemoProperties();
 
-            properties.setFkLookupByGlobalKTableAppId("fklookup-by-global-ktable-topology-test");
+            properties.setFkLookupByJoiningAppId("fklookup-by-joining-topology-test");
             properties.setOrderTopic(ORDER_TOPIC);
             properties.setCustomerTopic(CUSTOMER_TOPIC);
-            properties.setOrderEnrichedByGlobalKTableTopic(ORDER_ENRICHED_TOPIC);
+            properties.setOrderEnrichedByJoiningTopic(ORDER_ENRICHED_TOPIC);
 
             return properties;
         }

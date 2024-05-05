@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalstore;
+package xiaoyf.demo.kafka.topology.fklookup.commons;
 
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
@@ -11,13 +11,13 @@ import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Record;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 
-import static xiaoyf.demo.kafka.topology.fklookup.EnrichUtils.enrich;
+import static xiaoyf.demo.kafka.topology.fklookup.commons.EnrichUtils.enrich;
 
 /**
  * FkLookupProcessor applies generic foreign key lookup using a global store.
  */
 @Slf4j
-public class FkLookupProcessor implements Processor<OrderKey, OrderValue, OrderKey, OrderEnriched> {
+public class CustomerStoreLookupProcessor implements Processor<OrderKey, OrderValue, OrderKey, OrderEnriched> {
     public static final String CUSTOMER_STORE = "customer-store";
     private ProcessorContext<OrderKey, OrderEnriched> context;
     protected ReadOnlyKeyValueStore<CustomerKey, CustomerValue> store;

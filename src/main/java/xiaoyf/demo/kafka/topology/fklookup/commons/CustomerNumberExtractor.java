@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalktable;
+package xiaoyf.demo.kafka.topology.fklookup.commons;
 
 import demo.model.CustomerKey;
 import demo.model.OrderKey;

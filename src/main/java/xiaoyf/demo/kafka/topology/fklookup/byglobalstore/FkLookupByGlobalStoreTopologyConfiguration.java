@@ -10,6 +10,7 @@ import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class FkLookupByGlobalStoreTopologyConfiguration {
             Serde<CustomerKey> keySerde,
             Serde<CustomerValue> valueSerde) {
         return Stores.keyValueStoreBuilder(
-                Stores.inMemoryKeyValueStore(FkLookupProcessor.CUSTOMER_STORE),
+                Stores.inMemoryKeyValueStore(CustomerStoreLookupProcessor.CUSTOMER_STORE),
                 keySerde,
                 valueSerde);
     }

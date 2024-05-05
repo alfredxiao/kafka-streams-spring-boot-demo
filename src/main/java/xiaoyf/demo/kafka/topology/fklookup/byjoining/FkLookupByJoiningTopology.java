@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byglobalktable;
+package xiaoyf.demo.kafka.topology.fklookup.byjoining;
 
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
@@ -7,8 +7,8 @@ import demo.model.OrderValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.StreamsBuilder;
-import org.apache.kafka.streams.kstream.GlobalKTable;
-import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Joined;
+import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,32 +18,32 @@ import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerNumberExtractor;
 import xiaoyf.demo.kafka.topology.fklookup.commons.OrderCustomerJoiner;
 
-/*
-  GlobalKTable uses its input topic as changelog, so it's better to be set as compacted topic.
- */
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class FkLookupByGlobalKTableTopology {
+public class FkLookupByJoiningTopology {
     private final PropertiesLogHelper logHelper;
     private final DemoProperties properties;
+
     private final OrderCustomerJoiner orderCustomerJoiner;
     private final CustomerNumberExtractor customerNumberExtractor;
 
     @Autowired
-    void process(@Qualifier("fkLookupByGlobalKTableStreamsBuilder") StreamsBuilder builder) {
+    void process(@Qualifier("fkLookupByJoiningStreamsBuilder") StreamsBuilder builder) {
         logHelper.logProperties(log);
 
-        GlobalKTable<CustomerKey, CustomerValue> customerTable =
-                builder.globalTable(properties.getCustomerTopic(), Materialized.as("customer-global-table"));
+        final KTable<CustomerKey, CustomerValue> customerTable =
+                builder.<CustomerKey, CustomerValue>stream(properties.getCustomerTopic())
+                        .toTable(Named.as("customer-table"));
 
         builder.<OrderKey, OrderValue>stream(properties.getOrderTopic())
+                .selectKey(customerNumberExtractor)
                 .leftJoin(
                         customerTable,
-                        customerNumberExtractor,
                         orderCustomerJoiner,
-                        Named.as("order-joins-global-customer")
+                        Joined.as("order-joins-customer")
                 )
-                .to(properties.getOrderEnrichedByGlobalKTableTopic());
+                .selectKey((k, v) -> OrderKey.newBuilder().setOrderNumber(v.getOrderNumber()).build())
+                .to(properties.getOrderEnrichedByJoiningTopic());
     }
 }

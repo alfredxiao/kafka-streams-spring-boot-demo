@@ -13,6 +13,7 @@ public class DemoProperties {
     private String fkLookupByGlobalStoreAppId;
     private String fkLookupByGlobalKTableAppId;
     private String fkLookupByRegularStoreAppId;
+    private String fkLookupByJoiningAppId;
 
     private String orderTopic;
     private String orderDedupedTopic;
@@ -20,4 +21,5 @@ public class DemoProperties {
     private String orderEnrichedByGlobalStoreTopic;
     private String orderEnrichedByGlobalKTableTopic;
     private String orderEnrichedByRegularStoreTopic;
+    private String orderEnrichedByJoiningTopic;
 }

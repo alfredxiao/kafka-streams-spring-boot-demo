@@ -14,13 +14,13 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.info.GitProperties;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.commons.processor.GlobalStateStoreLoadingProcessor;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
+import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor;
 
-import static xiaoyf.demo.kafka.topology.fklookup.byglobalstore.FkLookupProcessor.CUSTOMER_STORE;
+import static xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor.CUSTOMER_STORE;
 
 /*
  Global store uses its input topic as changelog topic, no matter store type is persistent or memory based.
@@ -49,7 +49,7 @@ public class FkLookupByGlobalStoreTopology {
 
         builder.<OrderKey, OrderValue>stream(properties.getOrderTopic())
                 .process(
-                        FkLookupProcessor::new,
+                        CustomerStoreLookupProcessor::new,
                         Named.as("lookup-customer"))
                 .to(properties.getOrderEnrichedByGlobalStoreTopic());
     }

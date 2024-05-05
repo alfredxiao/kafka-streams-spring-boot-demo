@@ -9,6 +9,7 @@ import org.apache.kafka.streams.processor.api.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import xiaoyf.demo.kafka.helper.testhelper.ProcessorTestHelper;
+import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static xiaoyf.demo.kafka.helper.data.TestData.CUSTOMER_NAME;
@@ -16,16 +17,16 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerValue;
 import static xiaoyf.demo.kafka.helper.data.TestData.testOrderKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
-import static xiaoyf.demo.kafka.topology.fklookup.byglobalstore.FkLookupProcessor.CUSTOMER_STORE;
+import static xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor.CUSTOMER_STORE;
 
 public class CustomerStoreLookupProcessorTest {
 
-    private FkLookupProcessor processor;
+    private CustomerStoreLookupProcessor processor;
     private ProcessorTestHelper<OrderKey, OrderValue, CustomerKey, CustomerValue, OrderKey, OrderEnriched> helper;
 
     @BeforeEach
     public void init() {
-        processor = new FkLookupProcessor();
+        processor = new CustomerStoreLookupProcessor();
         helper = new ProcessorTestHelper<>(processor, CUSTOMER_STORE);
     }
 

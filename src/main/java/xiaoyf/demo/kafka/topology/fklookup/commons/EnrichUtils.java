@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup;
+package xiaoyf.demo.kafka.topology.fklookup.commons;
 
 import demo.model.CustomerValue;
 import demo.model.OrderEnriched;
