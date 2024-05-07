@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "CustomerOrderBatchKey",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "winStart",
+      "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      }
+    },
+    {
+      "name" : "winEnd",
+      "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      }
+    }
+  ]
+}

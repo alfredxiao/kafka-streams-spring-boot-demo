@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "CustomerOrderBatchValue",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "winStart",
+      "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      }
+    },
+    {
+      "name" : "winEnd",
+      "type" : {
+        "type" : "long",
+        "logicalType" : "timestamp-millis"
+      }
+    },
+    {
+      "name": "orders",
+      "type": {
+        "type": "array",
+        "items": "OrderValue",
+        "default": []
+      }
+    }
+  ]
+}

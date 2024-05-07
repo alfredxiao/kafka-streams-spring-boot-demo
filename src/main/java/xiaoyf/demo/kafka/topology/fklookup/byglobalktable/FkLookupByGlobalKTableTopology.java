@@ -20,6 +20,18 @@ import xiaoyf.demo.kafka.topology.fklookup.commons.OrderCustomerJoiner;
 
 /*
   GlobalKTable uses its input topic as changelog, so it's better to be set as compacted topic.
+  NOTE:
+   1. GlobalKTable is NOT time-synchronised: When there are existing records on 'location' topic, they are read into
+      GlobalKTable as first stage of stream processing before joining occurs. As a result, the following two scenarios
+      yield different/inconsistent results
+      - t0: start streaming application,
+        t1: insert 'click'    k1:Click1
+        t2: insert 'location' k1:Melbourne
+        -> EMPTY join output
+      - t0: insert 'click'    k1:Click1,
+        t1: insert 'location' k1:Melbourne
+        t2: start streaming application
+        -> Click1:Melbourne joined
  */
 @Component
 @RequiredArgsConstructor

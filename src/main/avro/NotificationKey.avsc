@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "NotificationKey",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "notificationNumber",
+      "type" : "long"
+    }
+  ]
+}

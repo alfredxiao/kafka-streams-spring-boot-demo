@@ -28,11 +28,15 @@ public class TestData {
     }
 
     public static OrderValue testOrderValue(final Long orderNumber) {
+        return testOrderValue(orderNumber, CUSTOMER_NUMBER);
+    }
+
+    public static OrderValue testOrderValue(final Long orderNumber, final Long customerNumber) {
         return OrderValue.newBuilder()
                 .setOrderNumber(orderNumber)
                 .setQuantity(11L)
                 .setCampaign("camp1")
-                .setCustomerNumber(CUSTOMER_NUMBER)
+                .setCustomerNumber(customerNumber)
                 .setProductName("iPhone v2")
                 .build();
     }

@@ -13,16 +13,24 @@ import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.Properties;
 
 @Slf4j
 public class TopologyTestHelper {
+    public static final Map<String, String> MOCK_CONFIG = Map.of(
+            AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy"
+    );
 
     @Getter
     private final TopologyTestDriver testDriver;
 
     public TopologyTestHelper(StreamsBuilder builder) {
+        this(builder, null);
+    }
+
+    public TopologyTestHelper(StreamsBuilder builder, Instant initialWallClockTime) {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "processor-test");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "dummy:1234");
@@ -32,40 +40,34 @@ public class TopologyTestHelper {
 
         Topology topology = builder.build(props);
 
-        this.testDriver = new TopologyTestDriver(topology, props);
+        this.testDriver =
+                initialWallClockTime == null
+                        ? new TopologyTestDriver(topology, props)
+                        : new TopologyTestDriver(topology, props, initialWallClockTime);
     }
 
     public <K extends SpecificRecord, V extends SpecificRecord> TestInputTopic<K, V> inputTopic(String topic) {
-        Map<String, String> conf = Map.of(
-                AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy"
-        );
-        
         return testDriver.createInputTopic(topic,
-                this.<K>keySerde(conf).serializer(),
-                this.<V>valueSerde(conf).serializer());
+                this.<K>keySerde().serializer(),
+                this.<V>valueSerde().serializer());
     }
 
     public <K extends SpecificRecord, V extends SpecificRecord> TestOutputTopic<K, V> outputTopic(String topic) {
-
-        Map<String, String> conf = Map.of(
-                AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "mock://dummy"
-        );
-
         return testDriver.createOutputTopic(topic,
-                this.<K>keySerde(conf).deserializer(),
-                this.<V>valueSerde(conf).deserializer());
+                this.<K>keySerde().deserializer(),
+                this.<V>valueSerde().deserializer());
     }
 
-    public <K extends SpecificRecord> Serde<K> keySerde(Map<String, String> conf) {
+    public <K extends SpecificRecord> Serde<K> keySerde() {
         Serde<K> keySerde = new SpecificAvroSerde<>();
-        keySerde.configure(conf, true);
+        keySerde.configure(MOCK_CONFIG, true);
 
         return keySerde;
     }
 
-    public <K extends SpecificRecord> Serde<K> valueSerde(Map<String, String> conf) {
+    public <K extends SpecificRecord> Serde<K> valueSerde() {
         Serde<K> keySerde = new SpecificAvroSerde<>();
-        keySerde.configure(conf, false);
+        keySerde.configure(MOCK_CONFIG, false);
 
         return keySerde;
     }
