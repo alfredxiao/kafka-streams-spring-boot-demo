@@ -14,11 +14,11 @@ spring:
         processing.guarantee: exactly_once
         num.stream.threads: 1
         commit.interval.ms: 1
-        default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-        default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        default.key.serde: xiaoyf.demo.kafka.helper.serde.AnySerde
+        default.value.serde: xiaoyf.demo.kafka.helper.serde.AnySerde
     producer:
-      key-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
-      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      key-serializer: xiaoyf.demo.kafka.helper.serde.AnySerializer
+      value-serializer: xiaoyf.demo.kafka.helper.serde.AnySerializer
       properties:
         linger.ms: 0
 

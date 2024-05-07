@@ -17,6 +17,8 @@ public class DemoProperties {
     private String fkLookupByRegularStoreAppId;
     private String fkLookupByJoiningAppId;
     private String scheduledJobAppId;
+    private String shortIdRegistryAppId;
+    private String shortIdLookupAppId;
 
     private Duration scheduleInterval;
 
@@ -28,4 +30,7 @@ public class DemoProperties {
     private String orderEnrichedByRegularStoreTopic;
     private String orderEnrichedByJoiningTopic;
     private String customerOrderBatchTopic;
+    private String longIdTopic;
+    private String longIdToShortIdTopic;
+    private String shortIdToLongIdTopic;
 }

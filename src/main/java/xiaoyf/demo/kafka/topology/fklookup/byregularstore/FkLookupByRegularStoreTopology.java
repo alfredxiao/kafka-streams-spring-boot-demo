@@ -38,7 +38,6 @@ public class FkLookupByRegularStoreTopology {
     void process(@Qualifier("fkLookupByRegularStoreStreamsBuilder") StreamsBuilder builder) {
         logHelper.logProperties(log);
 
-
         builder.addStateStore(customerStoreBuilder);
         builder.<CustomerKey, CustomerValue>stream(properties.getCustomerTopic())
                 .process(

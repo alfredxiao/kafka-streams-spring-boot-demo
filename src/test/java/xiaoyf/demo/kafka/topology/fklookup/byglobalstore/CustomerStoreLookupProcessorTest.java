@@ -22,17 +22,19 @@ import static xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupPro
 public class CustomerStoreLookupProcessorTest {
 
     private CustomerStoreLookupProcessor processor;
-    private ProcessorTestHelper<OrderKey, OrderValue, CustomerKey, CustomerValue, OrderKey, OrderEnriched> helper;
+    private ProcessorTestHelper<OrderKey, OrderValue, OrderKey, OrderEnriched> helper;
 
     @BeforeEach
     public void init() {
         processor = new CustomerStoreLookupProcessor();
-        helper = new ProcessorTestHelper<>(processor, CUSTOMER_STORE);
+        helper = new ProcessorTestHelper<OrderKey, OrderValue, OrderKey, OrderEnriched>()
+                .withStore(CUSTOMER_STORE)
+                .init(processor);
     }
 
     @Test
     public void shouldLookupCustomer() {
-        helper.getStore().put(testCustomerKey(), testCustomerValue());
+        helper.store(CUSTOMER_STORE).put(testCustomerKey(), testCustomerValue());
 
         Record<OrderKey, OrderValue> record = new Record<>(
                 testOrderKey(),
@@ -41,7 +43,7 @@ public class CustomerStoreLookupProcessorTest {
         );
         processor.process(record);
 
-        final var forwarded = helper.getForwarded();
+        final var forwarded = helper.forwarded();
 
         assertThat(forwarded).hasSize(1);
         assertThat(forwarded.get(0).record().value()).isNotNull();

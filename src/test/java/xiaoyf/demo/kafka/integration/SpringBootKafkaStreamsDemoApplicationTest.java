@@ -50,7 +50,8 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
                 "log.cleaner.enabled=false",
                 "transaction.state.log.replication.factor=1",
                 "transaction.state.log.min.isr=1",
-                "transaction.state.log.num.partitions=1"
+                "transaction.state.log.num.partitions=1",
+                "auto.create.topics.enable=true",
         }
 )
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)

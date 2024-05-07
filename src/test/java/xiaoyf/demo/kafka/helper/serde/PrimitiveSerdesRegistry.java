@@ -20,16 +20,18 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class SingletonNonAvroRegistry {
+public class PrimitiveSerdesRegistry {
 
-    private static final SingletonNonAvroRegistry INSTANCE = new SingletonNonAvroRegistry();
+    private static final PrimitiveSerdesRegistry INSTANCE = new PrimitiveSerdesRegistry();
 
-    private final Map<String, Class<?>> nonAvroTopicTypes;
+    private final Map<String, Class<?>> nonAvroKeyTypes;
+    private final Map<String, Class<?>> nonAvroValueTypes;
     private final Map<Class<?>, Serializer<?>> serializerMap;
     private final Map<Class<?>, Deserializer<?>> deserializerMap;
 
-    private SingletonNonAvroRegistry() {
-        this.nonAvroTopicTypes = new ConcurrentHashMap<>();
+    private PrimitiveSerdesRegistry() {
+        this.nonAvroKeyTypes = new ConcurrentHashMap<>();
+        this.nonAvroValueTypes = new ConcurrentHashMap<>();
         this.serializerMap = new ConcurrentHashMap<>();
         this.deserializerMap = new ConcurrentHashMap<>();
 
@@ -54,22 +56,27 @@ public class SingletonNonAvroRegistry {
         ));
     }
 
-    public static SingletonNonAvroRegistry getInstance() {
+    public static PrimitiveSerdesRegistry getInstance() {
         return INSTANCE;
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Serializer<T> getNonAvroSerializer(final String topic, final Class<?> clazz) {
-        nonAvroTopicTypes.putIfAbsent(topic, clazz);
-        return (Serializer<T>) serializerMap.get(clazz);
+    public Serializer<Object> serializer(final String topic, boolean isKey, final Class<?> clazz) {
+        nonAvroTypes(isKey).putIfAbsent(topic, clazz);
+
+        return (Serializer<Object>) serializerMap.get(clazz);
     }
 
     @SuppressWarnings("unchecked")
-    public <T> Deserializer<T> getNonAvroDeserializer(final String topic) {
-        Class<?> type = nonAvroTopicTypes.get(topic);
+    public Deserializer<Object> deserializer(final String topic, boolean isKey) {
+        Class<?> type = nonAvroTypes(isKey).get(topic);
 
         if (type == null) return null;
 
-        return (Deserializer<T>) deserializerMap.get(type);
+        return (Deserializer<Object>) deserializerMap.get(type);
+    }
+
+    private Map<String, Class<?>> nonAvroTypes(boolean isKey) {
+        return isKey ? nonAvroKeyTypes : nonAvroValueTypes;
     }
 }

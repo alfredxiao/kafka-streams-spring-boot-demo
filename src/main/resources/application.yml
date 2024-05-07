@@ -30,6 +30,8 @@ demo-streams:
   fk-lookup-by-regular-store-app-id: fk-lookup-by-regular-store-app
   fk-lookup-by-joining-app-id: fk-lookup-by-joining-app
   scheduled-job-app-id: scheduled-job-app
+  short-id-registry-app-id: scheduled-job-app
+  short-id-lookup-app-id: scheduled-job-app
   schedule-interval: PT5M
   order-topic: order
   customer-topic: customer
@@ -39,3 +41,6 @@ demo-streams:
   order-enriched-by-regular-store-topic: order-enriched-by-regular-store
   order-enriched-by-joining-topic: order-enriched-by-joining
   customer-order-batch-topic: customer-order-batch
+  long-id-topic: long-id
+  long-id-to-short-id-topic: long-id-to-short-id
+  short-id-to-long-id-topic: short-id-to-long-id

@@ -15,12 +15,14 @@ import static xiaoyf.demo.kafka.topology.dedupe.StoreBasedDedupeProcessor.ORDER_
 public class StoredBasedDedupeProcessorTest {
 
     private StoreBasedDedupeProcessor processor;
-    private ProcessorTestHelper<OrderKey, OrderValue, OrderKey, OrderValue, OrderKey, OrderValue> helper;
+    private ProcessorTestHelper<OrderKey, OrderValue, OrderKey, OrderValue> helper;
 
     @BeforeEach
     public void init() {
         processor = new StoreBasedDedupeProcessor();
-        helper = new ProcessorTestHelper<>(processor, ORDER_STORE);
+        helper = new ProcessorTestHelper<OrderKey, OrderValue, OrderKey, OrderValue>()
+                .withStore(ORDER_STORE)
+                .init(processor);
     }
 
     @Test
@@ -32,10 +34,10 @@ public class StoredBasedDedupeProcessorTest {
         );
         processor.process(record);
 
-        final var forwarded = helper.getForwarded();
+        final var forwarded = helper.forwarded();
 
         assertThat(forwarded).hasSize(1);
-        assertThat(helper.getStore().get(record.key())).isNotNull();
+        assertThat(helper.store(ORDER_STORE).get(record.key())).isNotNull();
     }
 
     @Test
@@ -53,7 +55,7 @@ public class StoredBasedDedupeProcessorTest {
         processor.process(record1);
         processor.process(record2);
 
-        final var forwarded = helper.getForwarded();
+        final var forwarded = helper.forwarded();
 
         assertThat(forwarded).hasSize(1);
     }
@@ -77,10 +79,10 @@ public class StoredBasedDedupeProcessorTest {
         processor.process(record1);
         processor.process(record2);
 
-        final var forwarded = helper.getForwarded();
+        final var forwarded = helper.forwarded();
 
         assertThat(forwarded).hasSize(2);
-        assertThat(helper.getStore().get(record2.key())).isEqualTo(orderUpdated);
+        assertThat(helper.store(ORDER_STORE).get(record2.key())).isEqualTo(orderUpdated);
     }
 
     @Test
@@ -100,10 +102,10 @@ public class StoredBasedDedupeProcessorTest {
         processor.process(record1);
         processor.process(record2);
 
-        final var forwarded = helper.getForwarded();
+        final var forwarded = helper.forwarded();
 
         assertThat(forwarded).hasSize(2);
-        assertThat(helper.getStore().approximateNumEntries()).isEqualTo(2);
+        assertThat(helper.store(ORDER_STORE).approximateNumEntries()).isEqualTo(2);
     }
 
 }

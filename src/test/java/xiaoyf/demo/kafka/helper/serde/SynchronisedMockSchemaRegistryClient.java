@@ -19,14 +19,14 @@ import java.util.Optional;
  * all single threaded so far, and this class is implemented in a naive way, and it is probably not easy
  * to really make it thread-safe otherwise parent class MockSchemaRegistryClient would have done this.
  */
-public class SingletonMockSchemaRegistryClient extends MockSchemaRegistryClient {
+public class SynchronisedMockSchemaRegistryClient extends MockSchemaRegistryClient {
 
-    private static final SingletonMockSchemaRegistryClient INSTANCE = new SingletonMockSchemaRegistryClient();
+    private static final SynchronisedMockSchemaRegistryClient INSTANCE = new SynchronisedMockSchemaRegistryClient();
 
-    private SingletonMockSchemaRegistryClient() {
+    private SynchronisedMockSchemaRegistryClient() {
     }
 
-    public static SingletonMockSchemaRegistryClient getInstance() {
+    public static SynchronisedMockSchemaRegistryClient getInstance() {
         return INSTANCE;
     }
 
