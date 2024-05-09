@@ -12,3 +12,5 @@ the other record hits a topic where a `processe()` task would be looking for a k
 store and does transformation as such; in such a scenario, there maybe a race condition, if the 
 `process()` task handling the second record is looking for the key of the first record, no guarantee
 that it can find them, depending on which record gets processed first.
+
+Even if memory store is used, serdes are still invoked to convert between Java objects and bytes?
