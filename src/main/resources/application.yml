@@ -32,6 +32,7 @@ demo-streams:
   scheduled-job-app-id: scheduled-job-app
   short-id-registry-app-id: scheduled-job-app
   short-id-lookup-app-id: scheduled-job-app
+  dual-join-app-id: dual-joining-app
   schedule-interval: PT5M
   order-topic: order
   customer-topic: customer
@@ -44,3 +45,6 @@ demo-streams:
   long-id-topic: long-id
   long-id-to-short-id-topic: long-id-to-short-id
   short-id-to-long-id-topic: short-id-to-long-id
+  preference-topic: preference
+  contact-topic: contact
+  enriched-preference-topic: enriched-preference

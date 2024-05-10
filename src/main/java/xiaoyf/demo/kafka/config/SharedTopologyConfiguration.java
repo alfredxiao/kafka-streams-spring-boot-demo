@@ -1,10 +1,13 @@
 package xiaoyf.demo.kafka.config;
 
 
+import demo.model.ContactValue;
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
 import demo.model.OrderKey;
 import demo.model.OrderValue;
+import demo.model.PreferenceKey;
+import demo.model.PreferenceValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serde;
@@ -45,6 +48,21 @@ public class SharedTopologyConfiguration {
 
     @Bean
     public Serde<CustomerValue> customerValueSerde(final GenericSerdeFactory genericSerdeFactory) {
+        return genericSerdeFactory.valueSerde();
+    }
+
+    @Bean
+    public Serde<PreferenceKey> preferenceKeySerde(final GenericSerdeFactory genericSerdeFactory) {
+        return genericSerdeFactory.keySerde();
+    }
+
+    @Bean
+    public Serde<PreferenceValue> preferenceValueSerde(final GenericSerdeFactory genericSerdeFactory) {
+        return genericSerdeFactory.valueSerde();
+    }
+
+    @Bean
+    public Serde<ContactValue> contactValueSerde(final GenericSerdeFactory genericSerdeFactory) {
         return genericSerdeFactory.valueSerde();
     }
 

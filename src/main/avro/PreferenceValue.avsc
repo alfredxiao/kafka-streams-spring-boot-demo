@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "name": "PreferenceValue",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "preferredComms",
+      "type" : {
+        "type": "enum",
+        "name": "CommunicationChannel",
+        "symbols" : ["EMAIL", "SNAIL", "SMS"]
+      }
+    },
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "contact",
+      "type" : ["null", "ContactValue"],
+      "default": null
+    }
+  ]
+}

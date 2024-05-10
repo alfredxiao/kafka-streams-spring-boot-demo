@@ -19,6 +19,7 @@ public class DemoProperties {
     private String scheduledJobAppId;
     private String shortIdRegistryAppId;
     private String shortIdLookupAppId;
+    private String dualJoinAppId;
 
     private Duration scheduleInterval;
 
@@ -33,4 +34,7 @@ public class DemoProperties {
     private String longIdTopic;
     private String longIdToShortIdTopic;
     private String shortIdToLongIdTopic;
+    private String preferenceTopic;
+    private String contactTopic;
+    private String enrichedPreferenceTopic;
 }

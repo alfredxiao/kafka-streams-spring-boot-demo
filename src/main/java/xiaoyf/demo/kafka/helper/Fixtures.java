@@ -49,7 +49,6 @@ public class Fixtures {
         var value = CustomerValue.newBuilder()
                 .setCustomerNumber(custNum)
                 .setName(name)
-                .setEmail(email)
                 .setActiveCampaigns(List.of(campaigns))
                 .build();
 

@@ -12,10 +12,6 @@
       "type" : "string"
     },
     {
-      "name" : "email",
-      "type" : "string"
-    },
-    {
       "name":"activeCampaigns",
       "type": {
         "type": "array",

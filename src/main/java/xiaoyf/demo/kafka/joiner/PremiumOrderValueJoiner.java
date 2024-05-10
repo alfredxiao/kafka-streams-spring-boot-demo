@@ -40,7 +40,6 @@ public class PremiumOrderValueJoiner implements ValueJoiner<OrderValue, Customer
                 .setOrderNumber(OrderValue.getOrderNumber())
                 .setCampaign(OrderValue.getCampaign())
                 .setName(CustomerValue.getName())
-                .setEmail(CustomerValue.getEmail())
                 .build();
     }
 }

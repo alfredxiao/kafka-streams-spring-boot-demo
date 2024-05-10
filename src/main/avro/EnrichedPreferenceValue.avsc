@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "EnrichedPreferenceValue",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "preferredComms",
+      "type" : {
+        "type": "enum",
+        "name": "CommunicationChannel",
+        "symbols" : ["EMAIL", "SNAIL", "SMS"]
+      }
+    },
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    }
+  ]
+}

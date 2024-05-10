@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "name": "ContactValue",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "email",
+      "type" : ["null","string"],
+      "default": null
+    },
+    {
+      "name" : "address",
+      "type" : ["null","string"],
+      "default": null
+    },
+    {
+      "name" : "phone",
+      "type" : ["null","string"],
+      "default": null
+    }
+  ]
+}

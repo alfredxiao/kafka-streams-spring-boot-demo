@@ -1,10 +1,10 @@
 {
   "type": "record",
-  "name": "NotificationKey",
+  "name": "PreferenceKey",
   "namespace": "demo.model",
   "fields": [
     {
-      "name" : "notificationNumber",
+      "name" : "preferenceNumber",
       "type" : "long"
     }
   ]

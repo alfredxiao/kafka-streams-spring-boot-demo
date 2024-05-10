@@ -11,7 +11,6 @@ public class TestData {
     public static final Long ORDER_NUMBER = 100L;
     public static final Long CUSTOMER_NUMBER = 2000L;
     public static final String CUSTOMER_NAME = "Alfred Xiao";
-    public static final String CUSTOMER_EMAIL = "ax@email.com";
 
     public static OrderKey testOrderKey() {
         return testOrderKey(ORDER_NUMBER);
@@ -51,7 +50,6 @@ public class TestData {
         return CustomerValue.newBuilder()
                 .setCustomerNumber(CUSTOMER_NUMBER)
                 .setName(CUSTOMER_NAME)
-                .setEmail(CUSTOMER_EMAIL)
                 .setActiveCampaigns(List.of("camp1"))
                 .build();
     }
