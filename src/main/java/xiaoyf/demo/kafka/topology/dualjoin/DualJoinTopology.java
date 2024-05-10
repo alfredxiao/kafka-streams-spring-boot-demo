@@ -48,13 +48,18 @@ public class DualJoinTopology {
         builder.<PreferenceKey, PreferenceValue>stream(properties.getPreferenceTopic())
                 .process(() -> new RekeyProcessor(preferenceKeySerde, properties))
                 .repartition()
-                .process(() -> new StorePutProcessor<>(PREFERENCE_STORE), PREFERENCE_STORE)
+                .peek((k,v) -> log.info("##!!3 {}/{}", k,v))
+                .process(() -> new StoreAndForwardProcessor<>(PREFERENCE_STORE), PREFERENCE_STORE)
+                .peek((k,v) -> log.info("##!!4 {}/{}", k,v))
                 .process(ContactJoiningProcessor::new, CONTACT_STORE)
+                .peek((k,v) -> log.info("##!!5 {}/{}", k,v))
                 .to(properties.getEnrichedPreferenceTopic());
 
         builder.<CustomerKey, ContactValue>stream(properties.getContactTopic())
-                .process(() -> new StorePutProcessor<>(CONTACT_STORE), CONTACT_STORE)
+                .process(() -> new StoreAndForwardProcessor<>(CONTACT_STORE), CONTACT_STORE)
+                .peek((k,v) -> log.info("##!!1 {}/{}", k,v))
                 .process(PreferenceJoiningProcessor::new, PREFERENCE_STORE)
+                .peek((k,v) -> log.info("##!!2 {}/{}", k,v))
                 .to(properties.getEnrichedPreferenceTopic());
 
     }

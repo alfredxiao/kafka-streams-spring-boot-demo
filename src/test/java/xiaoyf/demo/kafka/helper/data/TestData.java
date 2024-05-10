@@ -1,9 +1,13 @@
 package xiaoyf.demo.kafka.helper.data;
 
+import demo.model.CommunicationChannel;
+import demo.model.ContactValue;
 import demo.model.CustomerKey;
 import demo.model.CustomerValue;
 import demo.model.OrderKey;
 import demo.model.OrderValue;
+import demo.model.PreferenceKey;
+import demo.model.PreferenceValue;
 
 import java.util.List;
 
@@ -11,6 +15,9 @@ public class TestData {
     public static final Long ORDER_NUMBER = 100L;
     public static final Long CUSTOMER_NUMBER = 2000L;
     public static final String CUSTOMER_NAME = "Alfred Xiao";
+    private static final long PREFERENCE_NUMBER = 3000L;
+    private static final String EMAIL_ADDRESS = "alfred@email.com";
+    private static final String PHONE_NUMBER = "012345678";
 
     public static OrderKey testOrderKey() {
         return testOrderKey(ORDER_NUMBER);
@@ -51,6 +58,26 @@ public class TestData {
                 .setCustomerNumber(CUSTOMER_NUMBER)
                 .setName(CUSTOMER_NAME)
                 .setActiveCampaigns(List.of("camp1"))
+                .build();
+    }
+
+    public static PreferenceKey testPreferenceKey() {
+        return PreferenceKey.newBuilder()
+                .setPreferenceNumber(PREFERENCE_NUMBER)
+                .build();
+    }
+
+    public static PreferenceValue testPreferenceValue() {
+        return PreferenceValue.newBuilder()
+                .setCustomerNumber(CUSTOMER_NUMBER)
+                .setPreferredComms(CommunicationChannel.SMS)
+                .build();
+    }
+
+    public static ContactValue testContactValue() {
+        return ContactValue.newBuilder()
+                .setEmail(EMAIL_ADDRESS)
+                .setPhone(PHONE_NUMBER)
                 .build();
     }
 }

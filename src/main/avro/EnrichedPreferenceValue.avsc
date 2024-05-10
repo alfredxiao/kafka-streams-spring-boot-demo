@@ -14,6 +14,11 @@
     {
       "name" : "customerNumber",
       "type" : "long"
+    },
+    {
+      "name" : "contact",
+      "type" : ["null", "ContactValue"],
+      "default": null
     }
   ]
 }
