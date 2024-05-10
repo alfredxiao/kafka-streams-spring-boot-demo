@@ -47,4 +47,4 @@ demo-streams:
   short-id-to-long-id-topic: short-id-to-long-id
   preference-topic: preference
   contact-topic: contact
-  enriched-preference-topic: enriched-preference
+  enriched-preference-topic: preference-enriched

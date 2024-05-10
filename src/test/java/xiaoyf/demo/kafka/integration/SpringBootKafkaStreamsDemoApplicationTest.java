@@ -1,9 +1,10 @@
 package xiaoyf.demo.kafka.integration;
 
+import demo.model.CustomerKey;
+import demo.model.EnrichedPreferenceValue;
 import demo.model.OrderEnriched;
 import demo.model.OrderKey;
 import demo.model.OrderValue;
-import io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -18,8 +19,8 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.util.FileSystemUtils;
 import xiaoyf.demo.kafka.helper.consumer.TestConsumer;
+import xiaoyf.demo.kafka.helper.serde.AnyDeserializer;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -27,10 +28,13 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static xiaoyf.demo.kafka.helper.data.TestData.testContactValue;
 import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerValue;
 import static xiaoyf.demo.kafka.helper.data.TestData.testOrderKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
+import static xiaoyf.demo.kafka.helper.data.TestData.testPreferenceKey;
+import static xiaoyf.demo.kafka.helper.data.TestData.testPreferenceValue;
 
 @SpringBootTest(
         properties = {"spring.kafka.streams.application-id=intg-test-${random.uuid}"}
@@ -44,6 +48,9 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
                 SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_BY_GLOBAL_STORE_TOPIC,
                 SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_BY_GLOBAL_KTABLE_TOPIC,
                 SpringBootKafkaStreamsDemoApplicationTest.ORDER_ENRICHED_BY_JOINING_TOPIC,
+                SpringBootKafkaStreamsDemoApplicationTest.PREFERENCE_TOPIC,
+                SpringBootKafkaStreamsDemoApplicationTest.CONTACT_TOPIC,
+                SpringBootKafkaStreamsDemoApplicationTest.PREFERENCE_ENRICHED_TOPIC,
         },
         brokerProperties = {
                 "log.dirs=./build/kafka-logs",
@@ -64,9 +71,12 @@ class SpringBootKafkaStreamsDemoApplicationTest {
     public static final String ORDER_ENRICHED_BY_GLOBAL_KTABLE_TOPIC = "order-enriched-by-global-ktable";
     public static final String ORDER_ENRICHED_BY_REGULAR_STORE_TOPIC = "order-enriched-by-regular-store";
     public static final String ORDER_ENRICHED_BY_JOINING_TOPIC = "order-enriched-by-joining";
+    public static final String PREFERENCE_TOPIC = "preference";
+    public static final String CONTACT_TOPIC = "contact";
+    public static final String PREFERENCE_ENRICHED_TOPIC = "preference-enriched";
     private static final Duration MAX_WAIT_IN_TEST_CONSUMER = Duration.ofSeconds(15);
     private static final Duration MIN_WAIT_IN_TEST_CONSUMER = Duration.ofSeconds(3);
-    private static final String AVRO_DESERIALIZER_CLASS_NAME = SpecificAvroDeserializer.class.getName();
+    private static final String AVRO_DESERIALIZER_CLASS_NAME = AnyDeserializer.class.getName();
 
     @Autowired
     private KafkaTemplate<Object, Object> kafkaTemplate;
@@ -208,6 +218,35 @@ class SpringBootKafkaStreamsDemoApplicationTest {
                     List<ConsumerRecord<OrderKey, OrderEnriched>> received = testConsumer.getReceivedRecords();
                     assertThat(received).hasSize(1);
                     assertThat(received.get(0).key().getOrderNumber()).isEqualTo(orderNumber);
+                });
+    }
+
+    @Test
+    void shouldDualJoin() throws Exception {
+        kafkaTemplate.send(
+                PREFERENCE_TOPIC,
+                testPreferenceKey(),
+                testPreferenceValue()
+        ).get();
+
+        kafkaTemplate.send(
+                CONTACT_TOPIC,
+                testCustomerKey(),
+                testContactValue()
+        ).get();
+
+        TestConsumer<CustomerKey, EnrichedPreferenceValue> testConsumer = new TestConsumer<CustomerKey, EnrichedPreferenceValue>(
+                getBrokerPort(),
+                PREFERENCE_ENRICHED_TOPIC,
+                AVRO_DESERIALIZER_CLASS_NAME,
+                AVRO_DESERIALIZER_CLASS_NAME)
+                .startListening(MIN_WAIT_IN_TEST_CONSUMER, MAX_WAIT_IN_TEST_CONSUMER, 1);
+
+        await().atMost(MAX_WAIT_IN_TEST_CONSUMER)
+                .untilAsserted(() -> {
+                    List<ConsumerRecord<CustomerKey, EnrichedPreferenceValue>> received = testConsumer.getReceivedRecords();
+                    assertThat(received).hasSize(1);
+                    assertThat(received.get(0).value().getContact()).isNotNull();
                 });
     }
 
