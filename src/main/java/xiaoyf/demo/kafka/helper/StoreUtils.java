@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.helper.testhelper;
+package xiaoyf.demo.kafka.helper;
 
 import lombok.experimental.UtilityClass;
 import org.apache.kafka.streams.KeyValue;

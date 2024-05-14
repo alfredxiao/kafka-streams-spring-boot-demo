@@ -5,7 +5,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import xiaoyf.demo.kafka.helper.testhelper.ProcessorTestHelper;
-import xiaoyf.demo.kafka.helper.testhelper.StoreUtils;
+import xiaoyf.demo.kafka.helper.StoreUtils;
 
 import java.util.Map;
 

@@ -49,7 +49,7 @@ public class DualJoinTopology {
                 .process(() -> new RekeyProcessor(preferenceKeySerde, properties))
                 .repartition()
                 .process(() -> new StoreAndForwardProcessor<>(PREFERENCE_STORE), PREFERENCE_STORE)
-                .process(ContactJoiningProcessor::new, CONTACT_STORE)\
+                .process(ContactJoiningProcessor::new, CONTACT_STORE)
                 .to(properties.getEnrichedPreferenceTopic());
 
         builder.<CustomerKey, ContactValue>stream(properties.getContactTopic())
