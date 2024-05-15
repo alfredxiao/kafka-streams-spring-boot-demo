@@ -14,13 +14,18 @@ spring:
         replication.factor: 1
         num.stream.threads: 1
         state.dir: ./build/tmp/state-dir
-        processing.guarantee: exactly_once
+        processing.guarantee: exactly_once_v2
         default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
         default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+        application.server: ${SERVER_HOST:localhost}:${SERVER_PORT:8080}
 
 logging:
   level:
     root: INFO
+
+server:
+  host: ${SERVER_HOST:localhost}
+  port: ${SERVER_PORT:8080}
 
 demo-streams:
   mapping-app-id: map-app
@@ -30,8 +35,8 @@ demo-streams:
   fk-lookup-by-regular-store-app-id: fk-lookup-by-regular-store-app
   fk-lookup-by-joining-app-id: fk-lookup-by-joining-app
   scheduled-job-app-id: scheduled-job-app
-  short-id-registry-app-id: scheduled-job-app
-  short-id-lookup-app-id: scheduled-job-app
+  short-id-registry-app-id: short-id-registry-app
+  short-id-lookup-app-id: short-id-lookup-app
   dual-join-app-id: dual-joining-app
   schedule-interval: PT5M
   order-topic: order

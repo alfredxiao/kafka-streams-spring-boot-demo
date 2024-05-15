@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.Repartitioned;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class DualJoinTopology {
 
         builder.<PreferenceKey, PreferenceValue>stream(properties.getPreferenceTopic())
                 .process(() -> new RekeyProcessor(preferenceKeySerde, properties))
-                .repartition()
+                .repartition(Repartitioned.as("rekey-on-customer-number"))
                 .process(() -> new StoreAndForwardProcessor<>(PREFERENCE_STORE), PREFERENCE_STORE)
                 .process(ContactJoiningProcessor::new, CONTACT_STORE)
                 .to(properties.getEnrichedPreferenceTopic());

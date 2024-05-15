@@ -40,39 +40,38 @@ public class WallClockBatchingProcessor implements Processor<OrderKey, OrderValu
     @Override
     public void init(ProcessorContext<CustomerOrderBatchKey, CustomerOrderBatchValue> context) {
         this.context = context;
-        log.info("Initialising  processor");
+        log.info("Initialising scheduled job process, interval={}", this.interval);
 
-        final long remainMs = context.currentSystemTimeMs() % interval.toMillis();
-
-        if (remainMs == 0) {
-            bookRegularScheduleNow();
-            return;
-        }
+        final long current = System.currentTimeMillis();//context.currentSystemTimeMs();
+        final long windowMs = interval.toMillis();
+        final long remainMs = windowMs - (current % interval.toMillis());
+        log.info("time to next run: {} ms, curr:{}, interval:{}", remainMs, current, interval.toMillis());
 
         this.initialSchedule = this.context.schedule(
-                interval.minusMillis(remainMs),
+                Duration.ofMillis(remainMs),
                 PunctuationType.WALL_CLOCK_TIME,
-                this::bookRegularScheduleLater);
+                this::firstRun);
     }
 
-    void bookRegularScheduleNow() {
+    @SneakyThrows
+    void firstRun(Long now) {
+        log.info("book regular schedule...");
+
+        flush(now);
+
+        if (this.initialSchedule != null) {
+            this.initialSchedule.cancel();
+        }
+
         this.context.schedule(
                 this.interval,
                 PunctuationType.WALL_CLOCK_TIME,
                 this::flush);
     }
 
-    @SneakyThrows
-    void bookRegularScheduleLater(Long now){
-        if (this.initialSchedule != null) {
-            this.initialSchedule.cancel();
-        }
-
-        bookRegularScheduleNow();
-    }
-
     @Override
     public void process(Record<OrderKey, OrderValue> record) {
+        log.info("processing record: {}", record);
         if (record.value() == null || record.value().getCustomerNumber() == null) {
             log.warn("order {} does not have customer number, ignore", record.key().getOrderNumber());
             return;
@@ -94,6 +93,7 @@ public class WallClockBatchingProcessor implements Processor<OrderKey, OrderValu
 
     @SneakyThrows
     void flush(Long now){
+        log.info("flush running on {}", now);
         for (Map.Entry<CustomerOrderBatchKey,List<OrderValue>> entry : batches.entrySet()) {
             if (entry.getValue().isEmpty()) {
                 continue;
@@ -110,7 +110,7 @@ public class WallClockBatchingProcessor implements Processor<OrderKey, OrderValu
             );
             this.context.commit();
 
-            log.info("flushed customerNumber: {}, order count: {}", entry.getKey(), entry.getValue().size());
+            log.info("flushed/committed customerNumber: {}, order count: {}", entry.getKey(), entry.getValue().size());
             entry.getValue().clear();
         }
     }
