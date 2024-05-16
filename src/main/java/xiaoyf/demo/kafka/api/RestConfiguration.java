@@ -3,12 +3,10 @@ package xiaoyf.demo.kafka.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import demo.model.PreferenceValue;
 import io.swagger.v3.core.jackson.ModelResolver;
-//import io.swagger.jackson.ModelResolver;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import xiaoyf.demo.kafka.api.AvroMixin;
 
 @Configuration
 public class RestConfiguration {
