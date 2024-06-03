@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin;
+package xiaoyf.demo.kafka.topology.dualjoin.bystore;
 
 import demo.model.CustomerKey;
 import demo.model.PreferenceKey;
@@ -9,10 +9,16 @@ import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Record;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
 
 @Component
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="dual-join-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 public class RekeyProcessor implements Processor<PreferenceKey, PreferenceValue, CustomerKey, PreferenceValue> {
     private ProcessorContext<CustomerKey, PreferenceValue> context;

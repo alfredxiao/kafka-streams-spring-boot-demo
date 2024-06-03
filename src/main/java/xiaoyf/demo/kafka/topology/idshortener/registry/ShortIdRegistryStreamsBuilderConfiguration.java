@@ -3,6 +3,7 @@ package xiaoyf.demo.kafka.topology.idshortener.registry;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,11 @@ import xiaoyf.demo.kafka.config.DemoProperties;
 import java.util.Map;
 
 @Configuration
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="short-id-registry-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 public class ShortIdRegistryStreamsBuilderConfiguration {
 

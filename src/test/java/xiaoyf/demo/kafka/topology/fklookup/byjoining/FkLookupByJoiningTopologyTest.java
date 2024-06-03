@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.config.SharedTopologyConfiguration;
@@ -45,6 +46,9 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testOrderValue;
         OrderCustomerJoiner.class,
         CustomerNumberExtractor.class,
     }
+)
+@TestPropertySource(
+        properties = {"demo-streams.fk-lookup-by-joining-app-enabled=true"}
 )
 public class FkLookupByJoiningTopologyTest {
     final static String ORDER_TOPIC = "order";

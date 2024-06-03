@@ -23,6 +23,7 @@ public class CustomerStoreProcessor implements Processor<CustomerKey, CustomerVa
 
     @Override
     public void process(Record<CustomerKey, CustomerValue> record) {
+        log.info("storing customer record: {}", record);
         store.put(record.key(), record.value());
     }
 

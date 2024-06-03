@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TestData {
     public static final Long ORDER_NUMBER = 100L;
-    public static final Long CUSTOMER_NUMBER = 2000L;
+    public static final Long CUSTOMER_NUMBER = 8L;
     public static final String CUSTOMER_NAME = "Alfred Xiao";
     private static final long PREFERENCE_NUMBER = 3000L;
     private static final String EMAIL_ADDRESS = "alfred@email.com";

@@ -9,9 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
@@ -19,12 +21,16 @@ import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerNumberExtractor;
 import xiaoyf.demo.kafka.topology.fklookup.commons.OrderCustomerJoiner;
 
 @Component
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="fk-lookup-by-joining-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class FkLookupByJoiningTopology {
     private final PropertiesLogHelper logHelper;
     private final DemoProperties properties;
-
     private final OrderCustomerJoiner orderCustomerJoiner;
     private final CustomerNumberExtractor customerNumberExtractor;
 
@@ -34,7 +40,10 @@ public class FkLookupByJoiningTopology {
 
         final KTable<CustomerKey, CustomerValue> customerTable =
                 builder.<CustomerKey, CustomerValue>stream(properties.getCustomerTopic())
-                        .toTable(Named.as("customer-table"));
+                        .toTable(
+                                Named.as("customer-table"),
+                                Materialized.as("customer-table")
+                        );
 
         builder.<OrderKey, OrderValue>stream(properties.getOrderTopic())
                 .selectKey(customerNumberExtractor)

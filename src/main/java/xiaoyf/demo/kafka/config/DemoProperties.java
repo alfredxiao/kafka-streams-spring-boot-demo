@@ -13,6 +13,7 @@ public class DemoProperties {
 
     private String dedupeAppId;
     private String fkLookupByGlobalStoreAppId;
+    private Boolean fkLookupByGlobalStoreAppEnabled;
     private String fkLookupByGlobalKTableAppId;
     private String fkLookupByRegularStoreAppId;
     private String fkLookupByJoiningAppId;
@@ -20,6 +21,8 @@ public class DemoProperties {
     private String shortIdRegistryAppId;
     private String shortIdLookupAppId;
     private String dualJoinAppId;
+    private String tableTableJoinAppId;
+    private String streamTableJoinAppId;
 
     private Duration scheduleInterval;
 
@@ -37,4 +40,5 @@ public class DemoProperties {
     private String preferenceTopic;
     private String contactTopic;
     private String enrichedPreferenceTopic;
+    private String enrichedCustomerTopic;
 }

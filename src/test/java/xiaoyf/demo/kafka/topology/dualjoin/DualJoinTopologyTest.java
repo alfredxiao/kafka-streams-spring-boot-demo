@@ -20,10 +20,13 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.config.SharedTopologyConfiguration;
 import xiaoyf.demo.kafka.helper.testhelper.TopologyTestHelper;
+import xiaoyf.demo.kafka.topology.dualjoin.bystore.DualJoinTopology;
+import xiaoyf.demo.kafka.topology.dualjoin.bystore.DualJoinTopologyConfiguration;
 
 import java.util.List;
 
@@ -44,6 +47,9 @@ import static xiaoyf.demo.kafka.helper.data.TestData.testPreferenceValue;
         DualJoinTopology.class,
         DualJoinTopologyConfiguration.class,
     }
+)
+@TestPropertySource(
+        properties = {"demo-streams.dual-join-app-enabled=true"}
 )
 public class DualJoinTopologyTest {
     final static String PREFERENCE_TOPIC = "preference";

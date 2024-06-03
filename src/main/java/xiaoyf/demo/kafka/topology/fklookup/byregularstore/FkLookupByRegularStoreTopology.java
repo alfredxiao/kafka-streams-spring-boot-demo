@@ -13,6 +13,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
@@ -22,6 +23,11 @@ import xiaoyf.demo.kafka.topology.fklookup.commons.CustomerStoreLookupProcessor;
  Regular store uses its input topic as changelog topic, no matter store type is persistent or memory based.
  */
 @Component
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="fk-lookup-by-regular-store-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class FkLookupByRegularStoreTopology {

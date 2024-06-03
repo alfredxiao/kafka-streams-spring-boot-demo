@@ -15,6 +15,7 @@ import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.config.StreamsBuilderFactoryBean;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import static xiaoyf.demo.kafka.topology.dualjoin.PreferenceJoiningProcessor.PREFERENCE_STORE;
+import static xiaoyf.demo.kafka.topology.dualjoin.bystore.PreferenceJoiningProcessor.PREFERENCE_STORE;
 
 @RestController
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="dual-join-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class StoreQueryController {
@@ -44,6 +50,10 @@ public class StoreQueryController {
 
     @GetMapping("/preference/{customerNumber}")
     public PreferenceValue preference(@PathVariable(value = "customerNumber") Long customerNumber) {
+        if (factoryBean == null) {
+            log.warn("cannot find dualJoinStreamsBuilder bean");
+            return null;
+        }
 
         final KafkaStreams streams = factoryBean.getKafkaStreams();
         if (streams == null) {

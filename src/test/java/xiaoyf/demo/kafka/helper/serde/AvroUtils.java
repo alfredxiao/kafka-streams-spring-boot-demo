@@ -1,6 +1,5 @@
 package xiaoyf.demo.kafka.helper.serde;
 
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import lombok.experimental.UtilityClass;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.specific.SpecificRecord;

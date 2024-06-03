@@ -258,11 +258,14 @@ class SpringBootKafkaStreamsDemoApplicationTest {
 
         @PostConstruct
         public void init() throws Exception {
+            System.out.println("##!! INIT");
             kafkaTemplate.send(
                     CUSTOMER_TOPIC,
                     testCustomerKey(),
                     testCustomerValue()
             ).get();
+
+            //Thread.sleep(2000L);
         }
     }
 }

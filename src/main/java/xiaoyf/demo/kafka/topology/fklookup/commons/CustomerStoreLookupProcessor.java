@@ -10,6 +10,7 @@ import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Record;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
+import xiaoyf.demo.kafka.helper.StoreUtils;
 
 import static xiaoyf.demo.kafka.topology.fklookup.commons.EnrichUtils.enrich;
 
@@ -46,8 +47,9 @@ public class CustomerStoreLookupProcessor implements Processor<OrderKey, OrderVa
             final CustomerKey customerKey = CustomerKey.newBuilder().setCustomerNumber(customerNumber).build();
             final CustomerValue customer = store.get(customerKey);
             if (customer == null) {
-                log.info("foreign key extracted: {}, but no corresponding record found via lookup, order no. : {}",
-                        customerNumber, orderNumber);
+                log.info("foreign key extracted: {}, but no corresponding record found via lookup, order key. : {}",
+                        customerKey, record.key());
+                log.info("all entries in store: {}", StoreUtils.getAll(store));
                 return;
             }
 

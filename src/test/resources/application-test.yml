@@ -23,3 +23,16 @@ spring:
         linger.ms: 0
 
 init-create-topics: false
+
+demo-streams:
+  dedupe-app-enabled: true
+  fk-lookup-by-global-store-app-enabled: true
+  fk-lookup-by-global-ktable-app-enabled: true
+  fk-lookup-by-regular-store-app-enabled: true
+  fk-lookup-by-joining-app-enabled: true
+  scheduled-job-app-enabled: true
+  short-id-registry-app-enabled: true
+  short-id-lookup-app-enabled: true
+  dual-join-app-enabled: true
+  table-table-join-app-enabled: true
+  stream-table-join-app-enabled: true

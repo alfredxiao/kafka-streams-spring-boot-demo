@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin;
+package xiaoyf.demo.kafka.topology.dualjoin.bystore;
 
 import demo.model.ContactValue;
 import demo.model.CustomerKey;

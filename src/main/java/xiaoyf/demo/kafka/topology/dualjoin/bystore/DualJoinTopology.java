@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin;
+package xiaoyf.demo.kafka.topology.dualjoin.bystore;
 
 import demo.model.ContactValue;
 import demo.model.CustomerKey;
@@ -13,18 +13,24 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
 
-import static xiaoyf.demo.kafka.topology.dualjoin.PreferenceJoiningProcessor.PREFERENCE_STORE;
-import static xiaoyf.demo.kafka.topology.dualjoin.ContactJoiningProcessor.CONTACT_STORE;
+import static xiaoyf.demo.kafka.topology.dualjoin.bystore.PreferenceJoiningProcessor.PREFERENCE_STORE;
+import static xiaoyf.demo.kafka.topology.dualjoin.bystore.ContactJoiningProcessor.CONTACT_STORE;
 
 /*
  Dual Joining demos custom way to do stream-stream joining where either side of changes can trigger
  and emit an output. This is similar to a table-table join (with foreign key)
  */
 @Component
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="dual-join-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class DualJoinTopology {

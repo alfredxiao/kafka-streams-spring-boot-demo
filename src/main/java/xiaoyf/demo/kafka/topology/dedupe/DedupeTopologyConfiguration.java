@@ -8,10 +8,16 @@ import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="dedupe-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class DedupeTopologyConfiguration {
@@ -29,7 +35,7 @@ public class DedupeTopologyConfiguration {
         //            app has started, which means it does not recover from a topic.
         return Stores.keyValueStoreBuilder(
                 Stores.inMemoryKeyValueStore(StoreBasedDedupeProcessor.ORDER_STORE),
-//                Stores.persistentKeyValueStore(StoreBasedDedupeProcessor.ORDER_STORE),
+                // Stores.persistentKeyValueStore(StoreBasedDedupeProcessor.ORDER_STORE),
                 keySerde,
                 valueSerde);
     }

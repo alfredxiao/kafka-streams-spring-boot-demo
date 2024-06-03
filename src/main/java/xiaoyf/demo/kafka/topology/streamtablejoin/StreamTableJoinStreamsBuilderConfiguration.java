@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin;
+package xiaoyf.demo.kafka.topology.streamtablejoin;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.StreamsConfig;
@@ -13,14 +13,14 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-public class DualJoinStreamsBuilderConfiguration {
+public class StreamTableJoinStreamsBuilderConfiguration {
 
     private final DemoProperties properties;
-    @Bean("dualJoinStreamsBuilder")
-    public StreamsBuilderFactoryBean dualJoinStreamsBuilder(KafkaProperties props) {
+    @Bean("streamTableJoinStreamsBuilder")
+    public StreamsBuilderFactoryBean streamTableJoinStreamsBuilder(KafkaProperties props) {
 
         Map<String, Object> config = props.buildStreamsProperties(null);
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, properties.getDualJoinAppId());
+        config.put(StreamsConfig.APPLICATION_ID_CONFIG, properties.getStreamTableJoinAppId());
 
         return new StreamsBuilderFactoryBean(new KafkaStreamsConfiguration(config));
     }

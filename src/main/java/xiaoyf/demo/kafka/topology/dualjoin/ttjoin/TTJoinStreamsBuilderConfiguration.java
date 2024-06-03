@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.fklookup.byregularstore;
+package xiaoyf.demo.kafka.topology.dualjoin.ttjoin;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.StreamsConfig;
@@ -15,18 +15,18 @@ import java.util.Map;
 @Configuration
 @ConditionalOnProperty(
         prefix="demo-streams",
-        name="fk-lookup-by-regular-store-app-enabled",
+        name="table-table-join-app-enabled",
         havingValue = "true"
 )
 @RequiredArgsConstructor
-public class FkLookupByRegularStoreStreamsBuilderConfiguration {
+public class TTJoinStreamsBuilderConfiguration {
 
     private final DemoProperties properties;
-    @Bean("fkLookupByRegularStoreStreamsBuilder")
-    public StreamsBuilderFactoryBean fkLookupByRegularStoreStreamsBuilder(KafkaProperties props) {
+    @Bean("ttJoinStreamsBuilder")
+    public StreamsBuilderFactoryBean ttJoinStreamsBuilder(KafkaProperties props) {
 
         Map<String, Object> config = props.buildStreamsProperties(null);
-        config.put(StreamsConfig.APPLICATION_ID_CONFIG, properties.getFkLookupByRegularStoreAppId());
+        config.put(StreamsConfig.APPLICATION_ID_CONFIG, properties.getTableTableJoinAppId());
 
         return new StreamsBuilderFactoryBean(new KafkaStreamsConfiguration(config));
     }

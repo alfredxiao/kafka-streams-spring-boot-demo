@@ -12,6 +12,7 @@ import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import xiaoyf.demo.kafka.config.DemoProperties;
 import xiaoyf.demo.kafka.helper.PropertiesLogHelper;
@@ -34,6 +35,11 @@ import xiaoyf.demo.kafka.topology.fklookup.commons.OrderCustomerJoiner;
         -> Click1:Melbourne joined
  */
 @Component
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="fk-lookup-by-global-ktable-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class FkLookupByGlobalKTableTopology {

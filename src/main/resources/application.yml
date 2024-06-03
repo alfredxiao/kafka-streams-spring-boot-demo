@@ -4,7 +4,8 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     properties:
-      schema.registry.url: http://localhost:8081
+      schema.registry.url: http://localhost:9999
+#      schema.registry.url: http://localhost:8081
 #      basic.auth.credentials.source: dummy
 #      basic.auth.user.info: dummy
 #      specific.avro.reader: true
@@ -18,6 +19,7 @@ spring:
         default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
         default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
         application.server: ${SERVER_HOST:localhost}:${SERVER_PORT:8080}
+        max.task.idle.ms: 2500
 
 logging:
   level:
@@ -30,14 +32,27 @@ server:
 demo-streams:
   mapping-app-id: map-app
   dedupe-app-id: dedupe-app
+  dedupe-app-enabled: false
   fk-lookup-by-global-store-app-id: fk-lookup-by-global-store-app
+  fk-lookup-by-global-store-app-enabled: false
   fk-lookup-by-global-ktable-app-id: fk-lookup-by-global-ktable-app
+  fk-lookup-by-global-ktable-app-enabled: false
   fk-lookup-by-regular-store-app-id: fk-lookup-by-regular-store-app
+  fk-lookup-by-regular-store-app-enabled: false
   fk-lookup-by-joining-app-id: fk-lookup-by-joining-app
+  fk-lookup-by-joining-app-enabled: false
   scheduled-job-app-id: scheduled-job-app
+  scheduled-job-app-enabled: false
   short-id-registry-app-id: short-id-registry-app
+  short-id-registry-app-enabled: false
   short-id-lookup-app-id: short-id-lookup-app
+  short-id-lookup-app-enabled: false
   dual-join-app-id: dual-joining-app
+  dual-join-app-enabled: false
+  table-table-join-app-id: table-table-join-app
+  table-table-join-app-enabled: false
+  stream-table-join-app-id: stream-table-join-app
+  stream-table-join-app-enabled: true
   schedule-interval: PT5M
   order-topic: order
   customer-topic: customer
@@ -53,3 +68,4 @@ demo-streams:
   preference-topic: preference
   contact-topic: contact
   enriched-preference-topic: preference-enriched
+  enriched-customer-topic: customer-enriched

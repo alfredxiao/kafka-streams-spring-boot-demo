@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin;
+package xiaoyf.demo.kafka.topology.dualjoin.bystore;
 
 import demo.model.ContactValue;
 import demo.model.CustomerKey;
@@ -10,13 +10,19 @@ import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static xiaoyf.demo.kafka.topology.dualjoin.PreferenceJoiningProcessor.PREFERENCE_STORE;
-import static xiaoyf.demo.kafka.topology.dualjoin.ContactJoiningProcessor.CONTACT_STORE;
+import static xiaoyf.demo.kafka.topology.dualjoin.bystore.PreferenceJoiningProcessor.PREFERENCE_STORE;
+import static xiaoyf.demo.kafka.topology.dualjoin.bystore.ContactJoiningProcessor.CONTACT_STORE;
 
 @Configuration
+@ConditionalOnProperty(
+        prefix="demo-streams",
+        name="dual-join-app-enabled",
+        havingValue = "true"
+)
 @RequiredArgsConstructor
 @Slf4j
 public class DualJoinTopologyConfiguration {

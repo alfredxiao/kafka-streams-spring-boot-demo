@@ -6,12 +6,17 @@ This repository aims to provide some working code examples for spring boot based
 - stream-table join
 - multiple topology application
 - test utils for testing streams with avro
-- [todo] interactive query
+- [DONE] interactive query
 - [todo] exception handling?
 - [todo] use.latest.version
 - [todo] windowed
 - [todo] joinedwindow
 - [todo] suppress window
+- stream table join (the key schema, how is it set in two topics?)-optimization (.table and repartition)
+- when stream-table join, how lookup works at byte level (how it works if there are two schema ids)
+- when state lookup, how it works at byte level (two schema ids)
+- tx producer 1 write to topic A, not yet committed, can tx producer 2 write to A and commit?
+
 
 # Table-Table Join
 - both tables have to be materialised for the topology to run
