@@ -51,8 +51,12 @@ demo-streams:
   dual-join-app-enabled: false
   table-table-join-app-id: table-table-join-app
   table-table-join-app-enabled: false
-  stream-table-join-app-id: stream-table-join-app
-  stream-table-join-app-enabled: true
+  schema-id-hurts-app-id: schema-id-hurts-app
+  schema-id-hurts-app-enabled: false
+  stream-stream-self-join-app-id: stream-stream-self-join-app
+  stream-stream-self-join-app-enabled: false
+  stream-table-self-join-app-id: stream-stream-self-join-app
+  stream-table-self-join-app-enabled: false
   schedule-interval: PT5M
   order-topic: order
   customer-topic: customer
@@ -69,3 +73,4 @@ demo-streams:
   contact-topic: contact
   enriched-preference-topic: preference-enriched
   enriched-customer-topic: customer-enriched
+  preference-change-topic: preference-change

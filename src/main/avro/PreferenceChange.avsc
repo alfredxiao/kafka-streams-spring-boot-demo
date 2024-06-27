@@ -1,0 +1,27 @@
+{
+  "type": "record",
+  "name": "PreferenceChange",
+  "namespace": "demo.model",
+  "fields": [
+    {
+      "name" : "customerNumber",
+      "type" : "long"
+    },
+    {
+      "name" : "previous",
+      "type" : {
+        "type": "enum",
+        "name": "CommunicationChannel",
+        "symbols" : ["EMAIL", "SNAIL", "SMS"]
+      }
+    },
+    {
+      "name" : "current",
+      "type" : "CommunicationChannel"
+    },
+    {
+      "name" : "greenChange",
+      "type" : "boolean"
+    }
+  ]
+}

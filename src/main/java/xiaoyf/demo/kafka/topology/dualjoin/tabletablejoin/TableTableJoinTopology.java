@@ -1,4 +1,4 @@
-package xiaoyf.demo.kafka.topology.dualjoin.ttjoin;
+package xiaoyf.demo.kafka.topology.dualjoin.tabletablejoin;
 
 import demo.model.ContactValue;
 import demo.model.CustomerKey;

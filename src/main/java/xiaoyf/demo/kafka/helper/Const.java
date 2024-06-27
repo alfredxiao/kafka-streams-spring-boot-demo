@@ -8,19 +8,6 @@ public interface Const {
     String CUSTOMER_DETAIL_TOPIC = "customer-detail";
     String PREMIUM_ORDER_TOPIC = "premium-order";
 
-    // topics for stream-table-join
-    String CLICK_TOPIC = "click";
-    String LOCATION_TOPIC = "location";
-    String CLICK_PLUS_LOCATION_TOPIC = "click-plus-location";
-
-    String MCC_TRANSACTION_TOPIC = "mcc-transaction";
-    String MCC_CATEGORY_TOPIC = "mcc-category";
-    String MCC_CATEGORISED_TOPIC = "mcc-transaction-categorised";
-
-    // topics for secondary topology configuration
-    String LONG_NUMBER_TOPIC = "long-number";
-    String LONG_NUMBER_DOUBLED_TOPIC = "long-number-doubled";
-
     // topics for stream merging
     String STREAM1_TOPIC = "stream1";
     String STREAM2_TOPIC = "stream2";
@@ -32,8 +19,12 @@ public interface Const {
 
     String TIMESTAMP_INPUT_TOPIC = "timestamp-input";
     String TIMESTAMP_LOG_APPEND_TIME_TOPIC = "timestamp-log-append-time";
-    String TIMESTAMP_OUTPUT_TOPIC = "timestamp-output";
 
     String PRIMARY_APPLICATION_ID = "kafka-demo";
-    String SECONDARY_APPLICATION_ID = "secondary-kafka-demo";
+
+    String PREFERENCE_TOPIC = "preference";
+    String PREFERENCE_CHANGE_TOPIC = "preference-change";
+    String CONTACT_TOPIC = "contact";
+    String CUSTOMER_TOPIC = "customer";
+    String ORDER_TOPIC = "order";
 }

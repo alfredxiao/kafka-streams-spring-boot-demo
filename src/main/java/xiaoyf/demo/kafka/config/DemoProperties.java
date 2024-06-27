@@ -22,7 +22,9 @@ public class DemoProperties {
     private String shortIdLookupAppId;
     private String dualJoinAppId;
     private String tableTableJoinAppId;
-    private String streamTableJoinAppId;
+    private String schemaIdHurtsAppId;
+    private String streamStreamSelfJoinAppId;
+    private String streamTableSelfJoinAppId;
 
     private Duration scheduleInterval;
 
@@ -41,4 +43,5 @@ public class DemoProperties {
     private String contactTopic;
     private String enrichedPreferenceTopic;
     private String enrichedCustomerTopic;
+    private String preferenceChangeTopic;
 }

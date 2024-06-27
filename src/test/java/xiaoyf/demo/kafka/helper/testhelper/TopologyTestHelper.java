@@ -22,6 +22,9 @@ public class TopologyTestHelper {
     @Getter
     private final TopologyTestDriver testDriver;
 
+    @Getter
+    private final Topology  topology;
+
     public TopologyTestHelper(StreamsBuilder builder) {
         this(builder, null);
     }
@@ -34,7 +37,7 @@ public class TopologyTestHelper {
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, AnySerde.class);
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, AnySerde.class);
 
-        Topology topology = builder.build(props);
+        topology = builder.build(props);
 
         this.testDriver =
                 initialWallClockTime == null

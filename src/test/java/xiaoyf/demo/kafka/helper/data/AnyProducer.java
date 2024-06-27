@@ -10,6 +10,10 @@ import org.apache.kafka.common.errors.SerializationException;
 import java.util.Properties;
 
 import static xiaoyf.demo.kafka.helper.Const.BOOTSTRAP_SERVER;
+import static xiaoyf.demo.kafka.helper.Const.CONTACT_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.CUSTOMER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.ORDER_TOPIC;
+import static xiaoyf.demo.kafka.helper.Const.PREFERENCE_TOPIC;
 import static xiaoyf.demo.kafka.helper.data.TestData.testContactValue;
 import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerKey;
 import static xiaoyf.demo.kafka.helper.data.TestData.testCustomerValue;
@@ -48,7 +52,7 @@ public class AnyProducer {
 
     static void sendOrder() throws Exception {
         AnyProducer.produce(
-                "order",
+                ORDER_TOPIC,
                 testOrderKey(),
                 testOrderValue()
         );
@@ -56,7 +60,7 @@ public class AnyProducer {
 
     static void sendCustomer() throws Exception {
         AnyProducer.produce(
-                "customer",
+                CUSTOMER_TOPIC,
                 testCustomerKey(),
                 testCustomerValue()
         );
@@ -64,7 +68,7 @@ public class AnyProducer {
 
     static void sendContact() throws Exception {
         AnyProducer.produce(
-                "contact",
+                CONTACT_TOPIC,
                 testCustomerKey(),
                 testContactValue()
         );
@@ -74,7 +78,7 @@ public class AnyProducer {
         var pref = TestData.testPreferenceValue();
         pref.setCustomerNumber(2001);
         AnyProducer.produce(
-                "preference",
+                PREFERENCE_TOPIC,
                 TestData.testPreferenceKey(),
                 pref
         );
